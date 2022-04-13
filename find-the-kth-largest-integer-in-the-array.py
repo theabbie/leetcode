@@ -2,5 +2,9 @@ import heapq
 
 class Solution:
     def kthLargestNumber(self, nums: List[str], k: int) -> str:
-        kthlargest = heapq.nlargest(k, [int(num) for num in nums])
-        return str(kthlargest[k - 1])
+        heap = []
+        for num in nums:
+            heapq.heappush(heap, int(num))
+            if len(heap) > k:
+                heapq.heappop(heap)
+        return str(heap[0])

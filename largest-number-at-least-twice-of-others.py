@@ -3,6 +3,12 @@ class Solution:
         n = len(nums)
         if n < 2:
             return 0
-        currmax = max(range(n), key = lambda i: nums[i])
-        nums.sort()
-        return currmax if nums[-1] >= 2 * nums[-2] else -1
+        currmax = float('-inf')
+        secmax = float('-inf')
+        for num in nums:
+            if num > currmax:
+                secmax = currmax
+                currmax = num
+            elif num > secmax and num != currmax:
+                secmax = num
+        return nums.index(currmax) if currmax >= 2 * secmax else -1

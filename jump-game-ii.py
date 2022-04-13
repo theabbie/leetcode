@@ -1,19 +1,21 @@
 class Solution:
     memo = {}
     
-    def jumpRec(self, nums, i):
+    def jumpRec(self, nums, n, i):
         if i in self.memo:
             return self.memo[i]
-        if i >= len(nums) - 1:
+        if i >= n - 1:
+            self.memo[i] = 0
             return 0
         minJumps = float('inf')
         curr = nums[i]
         for jump in range(1, curr + 1):
-            numJumps = self.jumpRec(nums, i + jump)
-            minJumps = min(minJumps, 1 + numJumps)
+            if i + jump <= n - 1:
+                numJumps = self.jumpRec(nums, n, i + jump)
+                minJumps = min(minJumps, 1 + numJumps)
         self.memo[i] = minJumps
         return minJumps
     
-    def jump(self, nums: List[int], i = 0) -> int:
-        self.memo = {}
-        return self.jumpRec(nums, 0)
+    def jump(self, nums: List[int]) -> int:
+        self.memo.clear()
+        return self.jumpRec(nums, len(nums), 0)

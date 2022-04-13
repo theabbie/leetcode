@@ -1,6 +1,3 @@
 class Solution:
     def shuffle(self, nums: List[int], n: int) -> List[int]:
-        op = []
-        for i in range(n):
-            op.extend([nums[i], nums[i + n]])
-        return op
+        return [nums[(i >> 1) + n * (i & 1)] for i in range(2 * n)]

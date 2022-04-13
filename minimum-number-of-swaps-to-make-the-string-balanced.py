@@ -2,7 +2,7 @@ class Solution:
     def minSwaps(self, s: str) -> int:
         stack = []
         err = 0
-        for i, c in enumerate(s):
+        for c in s:
             if c == '[':
                 stack.append(c)
             elif c == ']':

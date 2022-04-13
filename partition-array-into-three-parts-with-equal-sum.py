@@ -3,16 +3,14 @@ class Solution:
         n = len(arr)
         total = sum(arr)
         curr = 0
-        first = []
-        second = []
+        f = -1
+        s = -1
         for i in range(n):
             curr += arr[i]
-            if curr * 3 == total:
-                first.append(i)
+            if f < 0 and curr * 3 == total:
+                f = i
             if curr * 3 == 2 * total:
-                second.append(i)
-        for f in first:
-            for s in second:
-                if s < n - 1 and f < s:
-                    return True
+                s = i
+            if f >= 0 and s >= 0 and f < s and s < n - 1:
+                return True
         return False

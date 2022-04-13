@@ -9,10 +9,12 @@ class Solution:
         for i in range(n):
             queue.append((0 | (1 << i), i))
         lvl = 1
-        while len(queue) > 0:
-            k = len(queue)
+        qi = 0
+        while qi < len(queue):
+            k = len(queue) - qi
             while k > 0:
-                curr, currnode = queue.pop(0)
+                curr, currnode = queue[qi]
+                qi += 1
                 for u in graph[currnode]:
                     newMask = curr | (1 << u)
                     if newMask == req:

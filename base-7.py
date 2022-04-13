@@ -6,9 +6,9 @@ class Solution:
         if num < 0:
             sign = "-"
             num *= -1
-        op = []
+        op = ""
         while num > 0:
             d = num % 7
             num = num // 7
-            op.insert(0, str(d))
-        return sign + "".join(op)
+            op = str(d) + op
+        return sign + op

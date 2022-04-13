@@ -27,7 +27,8 @@ class MyHashMap:
         k = len(self.arr[self.hfn(key)])
         for i in range(k):
             if self.arr[self.hfn(key)][i][0] == key:
-                del self.arr[self.hfn(key)][i]
+                self.arr[self.hfn(key)][i] = self.arr[self.hfn(key)][-1]
+                self.arr[self.hfn(key)].pop()
                 break
 
 

@@ -12,9 +12,7 @@ class Solution:
         carry = 0
         while i >= 0:
             currval = int(a[i]) + int(b[i]) + carry
-            op.insert(0, str(currval % 2))
+            op.append(str(currval % 2))
             carry = currval // 2
             i -= 1
-        if carry > 0:
-            op.insert(0, "1")
-        return "".join(op)
+        return "1" * carry + "".join(op[::-1])

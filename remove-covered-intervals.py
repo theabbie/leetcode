@@ -2,22 +2,17 @@ import bisect
 
 class Solution:
     def removeCoveredIntervals(self, intervals: List[List[int]]) -> int:
-        points = []
+        intervals.sort(key = lambda p: (p[0], p[0] - p[1]))
         n = len(intervals)
-        for i in range(n):
-            a, b = intervals[i]
-            bisect.insort(points, (a, a - b))
         i = 0
-        while i < len(points):
-            a, l = points[i]
-            l = -l
+        while i < len(intervals):
+            a, b = intervals[i]
             j = i + 1
-            while j < len(points) and points[j][0] <= a + l:
-                b, nl = points[j]
-                nl = -nl
-                if b + nl <= a + l:
-                    points.pop(j)
+            while j < len(intervals) and intervals[j][0] <= b:
+                c, d = intervals[j]
+                if d <= b:
+                    intervals.pop(j)
                 else:
                     j += 1
             i += 1
-        return len(points)
+        return len(intervals)

@@ -5,7 +5,6 @@ class Solution:
         maxEndingHere = 0
         for i in range(n):
             maxEndingHere += nums[i]
-            if maxSoFar < maxEndingHere:
-                maxSoFar = maxEndingHere
+            maxSoFar = max(maxSoFar, maxEndingHere)
             maxEndingHere = max(maxEndingHere, 0)
         return maxSoFar

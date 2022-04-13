@@ -4,11 +4,8 @@ class Solution:
         for i, gsize in enumerate(groupSizes):
             numpeople[gsize] = numpeople.get(gsize, []) + [i]
         op = []
-        for size in numpeople:
-            n = len(numpeople[size])
-            if n == size:
-                op.append(numpeople[size])
-            else:
-                for i in range(0, n, size):
-                    op.append(numpeople[size][i:i+size])
+        for size, people in numpeople.items():
+            n = len(people)
+            for i in range(0, n, size):
+                op.append(people[i:i+size])
         return op

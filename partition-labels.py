@@ -1,16 +1,16 @@
 class Solution:
-    def partitionLabels(self, s: str) -> List[int]:
-        n = len(s)
-        if n == 0:
+    def partition(self, s, pos, k, n):
+        if k >= n:
             return []
-        chars = set(s)
+        j = float('-inf')
+        for i in range(k, n):
+            j = max(pos[s[i]], j)
+            if j == i:
+                return [i + 1 - k] + self.partition(s, pos, i + 1, n)
+    
+    def partitionLabels(self, s: str, k = 0) -> List[int]:
         pos = {}
+        n = len(s)
         for i, c in enumerate(s):
             pos[c] = i
-        i = 0
-        while i < n:
-            j = max(pos[c] for c in s[:i+1])
-            if j == i:
-                break
-            i += 1
-        return [i + 1] + self.partitionLabels(s[i+1:])
+        return self.partition(s, pos, 0, n)

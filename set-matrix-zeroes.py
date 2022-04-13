@@ -9,8 +9,7 @@ class Solution:
                 if matrix[i][j] == 0:
                     rows.add(i)
                     cols.add(j)
-        for row in rows:
-            matrix[row] = [0 for i in range(n)]
-        for col in cols:
-            for i in range(m):
-                matrix[i][col] = 0
+        for i in range(m):
+            for j in range(n):
+                if i in rows or j in cols:
+                    matrix[i][j] = 0

@@ -7,11 +7,9 @@
 class Solution:
     def insertIntoMaxTree(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
         curr = TreeNode(val = val)
-        if not root:
-            return curr
-        if val > root.val:
+        if not root or val > root.val:
             curr.left = root
-            return curr
+            root = curr
         else:
             root.right = self.insertIntoMaxTree(root.right, val)
-            return root
+        return root

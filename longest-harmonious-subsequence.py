@@ -2,10 +2,13 @@ class Solution:
     def findLHS(self, nums: List[int]) -> int:
         nums.sort()
         pos = {}
-        mlen = 0
         for i, num in enumerate(nums):
-            pos[num] = pos.get(num, []) + [i]
+            if num in pos:
+                pos[num][1] = i
+            else:
+                pos[num] = [i, i]
+        mlen = 0
         for num in pos:
             if num + 1 in pos:
-                mlen = max(mlen, max(pos[num + 1]) - min(pos[num]) + 1)
+                mlen = max(mlen, pos[num + 1][1] - pos[num][0] + 1)
         return mlen

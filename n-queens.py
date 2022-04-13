@@ -9,13 +9,11 @@ class Solution:
                 op += [[j] + v for v in val]
         return op
     
+    def getRow(self, i, n):
+        val = ["."] * n
+        val[i] = "Q"
+        return "".join(val)
+    
     def solveNQueens(self, n: int) -> List[List[str]]:
         queens = self.getAllPos(set(), set(), set(), 0, n)
-        op = []
-        for q in queens:
-            op.append([])
-            for col in q:
-                val = ["."] * n
-                val[col] = "Q"
-                op[-1].append("".join(val))
-        return op
+        return [[self.getRow(i, n) for i in q] for q in queens]

@@ -8,7 +8,7 @@ class Solution:
         for i in range(3):
             ctr[ord(s[i]) - ord('a')] += 1
         for i in range(n - 3):
-            if set(ctr) == {0, 1}:
+            if max(ctr) == 1:
                 dist += 1
             ctr[ord(s[i]) - ord('a')] -= 1
             ctr[ord(s[i+3]) - ord('a')] += 1

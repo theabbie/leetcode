@@ -8,14 +8,9 @@ class Solution:
     def mlen(self, root):
         if not root:
             return 0
-        l = 0
-        r = 0
+        l = self.mlen(root.left)
+        r = self.mlen(root.right)
         mpath = 1
-        if root.left:
-            l = self.mlen(root.left)
-        if root.right:
-            r = self.mlen(root.right)
-        self.pathlen = max(self.pathlen, l, r)
         if root.left and root.left.val == root.val:
             mpath = max(mpath, 1 + l)
             self.pathlen = max(self.pathlen, 1 + l)

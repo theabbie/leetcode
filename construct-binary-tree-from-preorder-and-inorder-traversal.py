@@ -5,22 +5,23 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def buildTreeRec(self, inorder, root):
-        if len(inorder) > 0:
-            currRoot = min((i for i in range(len(inorder))), key = lambda x: self.valIndex[inorder[x]])
-            root.val = inorder[currRoot]
-            if currRoot > 0:
+    def buildTreeRec(self, p, q):
+        if p < q:
+            root = TreeNode()
+            currRoot = min((i for i in range(p, q)), key = lambda x: self.valIndex[self.inorder[x]])
+            root.val = self.inorder[currRoot]
+            if currRoot > p:
                 root.left = TreeNode()
-                self.buildTreeRec(inorder[:currRoot], root.left)
-            if currRoot < len(inorder) - 1:
+                root.left = self.buildTreeRec(p, currRoot)
+            if currRoot < q - 1:
                 root.right = TreeNode()
-                self.buildTreeRec(inorder[currRoot + 1 :], root.right)
+                root.right = self.buildTreeRec(currRoot + 1, q)
+            return root
     
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
-        root = TreeNode()
         n = len(inorder)
+        self.inorder = inorder
         self.valIndex = {}
         for i, item in enumerate(preorder):
             self.valIndex[item] = i
-        self.buildTreeRec(inorder, root)
-        return root
+        return self.buildTreeRec(0, n)

@@ -21,15 +21,16 @@ class Solution:
             return self.cache[i]
         mlen = 1
         for j in range(i + 1, n):
-            if nums[j] > nums[i]:
-                mlen = max(mlen, 1 + self.lislen(nums, j, n))
+            if i == -1 or nums[j] > nums[i]:
+                currlen = self.lislen(nums, j, n)
+                if i == -1:
+                    mlen = max(mlen, currlen)
+                else:
+                    mlen = max(mlen, 1 + currlen)
         self.cache[i] = mlen
         return mlen
     
     def lengthOfLIS(self, nums: List[int]) -> int:
         n = len(nums)
         self.cache = {}
-        maxSeq = 1
-        for i in range(n):
-            maxSeq = max(maxSeq, self.lislen(nums, i, n))
-        return maxSeq
+        return self.lislen(nums, -1, n)

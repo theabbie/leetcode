@@ -15,9 +15,8 @@ class Solution:
             if currtrips < totalTrips and nexttrips >= totalTrips:
                 return mid + 1
             elif beg == end:
-                break
+                return mid
             elif currtrips < totalTrips:
                 beg = mid
             else:
                 end = mid
-        return (beg + end) // 2

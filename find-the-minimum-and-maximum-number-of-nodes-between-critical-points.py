@@ -16,13 +16,16 @@ class Solution:
         prev = None
         curr = head
         i = 0
+        mindist = float('inf')
         while curr and curr.next:
             if prev and self.isCritical(curr, prev, curr.next):
+                if len(critical) > 0:
+                    mindist = min(mindist, i - critical[-1])
                 critical.append(i)
             prev = curr
             curr = curr.next
             i += 1
         if len(critical) >= 2:
             k = len(critical)
-            return [min(critical[i+1] - critical[i] for i in range(k - 1)), critical[-1] - critical[0]]
+            return [mindist, critical[-1] - critical[0]]
         return [-1, -1]

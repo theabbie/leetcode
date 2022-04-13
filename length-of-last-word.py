@@ -1,13 +1,11 @@
 class Solution:
     def lengthOfLastWord(self, s: str) -> int:
-        s += " "
-        latest = None
+        s = " " + s
+        n = len(s)
         chunk = ""
-        for c in s:
-            if c == " ":
+        for i in range(n - 1, -1, -1):
+            if s[i] == " ":
                 if len(chunk) > 0:
-                    latest = chunk
-                chunk = ""
+                    return len(chunk)
             else:
-                chunk += c
-        return len(latest)
+                chunk += s[i]

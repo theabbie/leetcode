@@ -11,8 +11,9 @@ class Solution:
             bisect.insort(starts, (i, k))
             bisect.insort(ends, (j, k))
         sinx = [s[0] for s in starts]
+        lst = len(starts)
         for end, i in ends:
             pos = bisect.bisect_left(sinx, end)
-            if pos < len(starts):
+            if pos < lst:
                 ans[i] = starts[pos][1]
         return ans

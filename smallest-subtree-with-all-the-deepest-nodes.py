@@ -14,12 +14,11 @@ class Solution:
     
     def subtreeWithAllDeepest(self, root: TreeNode) -> TreeNode:
         if root:
-            h = self.maxDepth(root)
-            a = self.maxDepth(root.left) == h - 1
-            b = self.maxDepth(root.right) == h - 1
-            if a and b:
-                return root
-            if a:
+            left = self.maxDepth(root.left)
+            right = self.maxDepth(root.right)
+            if left > right:
                 return self.subtreeWithAllDeepest(root.left)
-            if b:
+            elif right > left:
                 return self.subtreeWithAllDeepest(root.right)
+            else:
+                return root

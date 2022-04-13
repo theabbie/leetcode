@@ -8,18 +8,12 @@ class Solution:
     def maxDepth(self, root):
         if not root:
             return -1
-        return max(1 + self.maxDepth(root.left), 1 + self.maxDepth(root.right))
+        a = 1 + self.maxDepth(root.left)
+        b =  1 + self.maxDepth(root.right)
+        self.md = max(self.md, a + b)
+        return max(a, b)
     
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
-        md = float('-inf')
-        nodes = [root]
-        i = 0
-        while i < len(nodes):
-            curr = nodes[i]
-            md = max(md, 2 + self.maxDepth(curr.left) + self.maxDepth(curr.right))
-            if curr.left:
-                nodes.append(curr.left)
-            if curr.right:
-                nodes.append(curr.right)
-            i += 1
-        return md
+        self.md = float('-inf')
+        self.maxDepth(root)
+        return self.md

@@ -5,11 +5,13 @@ class Solution:
         if n in self.memo:
             return self.memo[n]
         k = 0
-        while 3 ** k <= n:
-            if k not in used and self.check(n - 3 ** k, used.union({k})):
+        ex = 3 ** k
+        while ex <= n:
+            if k not in used and self.check(n - ex, used.union({k})):
                 self.memo[n] = True
                 return True
             k += 1
+            ex = 3 ** k
         self.memo[n] = False
         return False
     

@@ -13,7 +13,7 @@ class Solution:
         window = sorted(nums[:k])
         for i in range(0, n - k):
             medians.append(getMedian(window))
-            window.remove(nums[i])
+            del window[bisect.bisect_left(window, nums[i])]
             bisect.insort(window, nums[i + k])
         medians.append(getMedian(window))
         return medians

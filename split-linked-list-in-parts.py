@@ -15,14 +15,14 @@ class Solution:
         i = 0
         prev = None
         curr = head
-        while curr and i < lens[0]:
+        while curr and i < lens[p - 1]:
             prev = curr
             curr = curr.next
             i += 1
         prev.next = None
         if p < len(self.op):
             self.op[p] = curr
-        self.getParts(curr, lens[1:], p + 1)
+        self.getParts(curr, lens, p + 1)
     
     def splitListToParts(self, head: Optional[ListNode], k: int) -> List[Optional[ListNode]]:
         n = self.getLength(head)

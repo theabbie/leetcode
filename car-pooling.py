@@ -1,4 +1,4 @@
-import bisect
+import heapq
 
 class Solution:
     def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
@@ -6,12 +6,11 @@ class Solution:
         points = []
         for i in range(n):
             num, source, dest = trips[i]
-            bisect.insort(points, (source, num))
-            bisect.insort(points, (dest, -num))
-        k = len(points)
+            heapq.heappush(points, (source, num))
+            heapq.heappush(points, (dest, -num))
         curr = 0
-        for i in range(k):
-            curr += points[i][1]
+        while len(points) > 0:
+            curr += heapq.heappop(points)[1]
             if curr > capacity:
                 return False
         return True

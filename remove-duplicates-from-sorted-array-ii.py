@@ -10,7 +10,6 @@ class Solution:
                     nums[i] = None
                 i += 1
             i += 1
-        print(nums)
         i = 0
         while i < len(nums):
             if nums[i] == None:

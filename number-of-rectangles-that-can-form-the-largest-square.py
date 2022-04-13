@@ -1,6 +1,12 @@
 class Solution:
     def countGoodRectangles(self, rectangles: List[List[int]]) -> int:
-        ctr = {}
+        mx = 0
+        ctr = 0
         for a, b in rectangles:
-            ctr[min(a, b)] = ctr.get(min(a, b), 0) + 1
-        return ctr[max(ctr.keys())]
+            curr = min(a, b)
+            if curr == mx:
+                ctr += 1
+            elif curr > mx:
+                ctr = 1
+                mx = curr
+        return ctr

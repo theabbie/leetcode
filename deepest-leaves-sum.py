@@ -9,10 +9,15 @@ class Solution:
         if root:
             self.inorder(root.left, l + 1)
             if not root.left and not root.right:
-                self.leaves[l] = self.leaves.get(l, 0) + root.val
+                if l > self.deepest:
+                    self.deepest = l
+                    self.deepestsum = root.val
+                elif l == self.deepest:
+                    self.deepestsum += root.val
             self.inorder(root.right, l + 1)
     
     def deepestLeavesSum(self, root: Optional[TreeNode]) -> int:
-        self.leaves = {}
+        self.deepest = 0
+        self.deepestsum = 0
         self.inorder(root, 0)
-        return self.leaves[max(self.leaves.keys())]
+        return self.deepestsum

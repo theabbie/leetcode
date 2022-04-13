@@ -7,11 +7,11 @@ class Solution:
                 op1 = stack.pop()
                 if t == '+':
                     stack.append(op1 + op2)
-                if t == '-':
+                elif t == '-':
                     stack.append(op1 - op2)
-                if t == '*':
+                elif t == '*':
                     stack.append(op1 * op2)
-                if t == '/':
+                elif t == '/':
                     stack.append(int(op1 / op2))
             else:
                 stack.append(int(t))

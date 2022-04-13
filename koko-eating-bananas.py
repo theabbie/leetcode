@@ -10,13 +10,8 @@ class Solution:
         return currh
     
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
-        k = 1
-        currh = self.getTime(piles, k)
-        while currh > h:
-            k *= 2
-            currh = self.getTime(piles, k)
-        beg = k // 2
-        end = k
+        beg = 1
+        end = max(piles)
         while beg < end:
             mid = (beg + end) // 2
             currh = self.getTime(piles, mid)
@@ -27,3 +22,4 @@ class Solution:
                 beg = mid + 1
             else:
                 end = mid
+        return 1

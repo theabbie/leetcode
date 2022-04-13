@@ -19,10 +19,19 @@ class Solution:
         return op
     
     def mulNtimes(self, num, n):
+        if n == 0:
+            return "0"
+        if n == 1:
+            return num
         op = "0"
-        for _ in range(n):
-            op = self.addStrings(op, num)
-        return op
+        if n & 1:
+            a = num
+            b = self.mulNtimes(num, (n - 1) // 2)
+            b = self.addStrings(b, b)
+            return self.addStrings(a, b)
+        else:
+            a = self.mulNtimes(num, n // 2)
+            return self.addStrings(a, a)
     
     def multiply(self, num1: str, num2: str) -> str:
         op = "0"

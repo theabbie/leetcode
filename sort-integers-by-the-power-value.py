@@ -1,3 +1,5 @@
+import heapq
+
 class Solution:
     def getPower(self, n):
         if n == 1:
@@ -14,4 +16,9 @@ class Solution:
     
     def getKth(self, lo: int, hi: int, k: int) -> int:
         self.power = {}
-        return sorted(range(lo, hi + 1), key = self.getPower)[k - 1]
+        heap = []
+        for num in range(lo, hi + 1):
+            heapq.heappush(heap, (-self.getPower(num), -num))
+            if len(heap) > k:
+                heapq.heappop(heap)
+        return -heap[0][1]

@@ -7,4 +7,7 @@ class Solution:
             1: "Silver Medal",
             2: "Bronze Medal"
         }
-        return [labels.get(ranks.index(i), str(ranks.index(i) + 1)) for i in range(n)]
+        op = [0] * n
+        for i, r in enumerate(ranks):
+            op[r] = labels.get(i, str(i + 1))
+        return op

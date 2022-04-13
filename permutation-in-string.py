@@ -2,9 +2,8 @@ class Solution:
     def checkInclusion(self, p: str, s: str) -> bool:
         np = len(p)
         ns = len(s)
-        op = []
         if np > ns:
-            return op
+            return False
         pctr = [0] * 26
         for c in p:
             pctr[ord(c) - ord('a')] += 1

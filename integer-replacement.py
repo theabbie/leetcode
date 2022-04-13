@@ -5,9 +5,9 @@ class Solution:
         if n == 3:
             return 2
         if n & 1:
-            if (n + 1) % 4 == 0:
-                return 1 + self.integerReplacement(n + 1)
+            if (n + 1) & 3 == 0:
+                return 3 + self.integerReplacement((n + 1) >> 2)
             else:
-                return 1 + self.integerReplacement(n - 1)
+                return 2 + self.integerReplacement((n - 1) >> 1)
         else:
-            return 1 + self.integerReplacement(n // 2)
+            return 1 + self.integerReplacement(n >> 1)

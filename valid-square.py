@@ -11,10 +11,15 @@ class Solution:
     def validSquare(self, p1: List[int], p2: List[int], p3: List[int], p4: List[int]) -> bool:
         plist = [p1, p2, p3, p4]
         points = [[(0, 1), (2, 3)], [(0, 2), (1, 3)], [(0, 3), (1, 2)]]
-        for d1, d2 in points:
-            a, b = [plist[d] for d in d1]
-            c, d = [plist[d] for d in d2]
-            
-            if self.dist(a, b) == self.dist(c, d) and self.dist(a, b) > 0 and self.midPoint(a, b) == self.midPoint(c, d) and self.isPerpendicular(a, b, c, d):
+        for diag in points:
+            a, b = [plist[d] for d in diag[0]]
+            c, d = [plist[d] for d in diag[1]]
+            isBisector = self.midPoint(a, b) == self.midPoint(c, d)
+            if not isBisector:
+                continue
+            d1, d2 = self.dist(a, b), self.dist(c, d)
+            if d1 != d2 or d1 == 0:
+                continue
+            if self.isPerpendicular(a, b, c, d):
                 return True
         return False

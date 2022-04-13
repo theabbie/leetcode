@@ -1,7 +1,8 @@
+import bisect
+
 class Solution:
     def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
-        intervals += [newInterval]
-        intervals.sort(key = lambda x: x[0])
+        bisect.insort(intervals, newInterval)
         n = len(intervals)
         i = 0
         while i < len(intervals) - 1:

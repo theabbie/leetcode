@@ -7,5 +7,7 @@ class Solution:
             if len(curr) < k:
                 for j in range(curr[-1] + 1, n + 1):
                     combs.append(curr + [j])
-            i += 1
-        return [comb for comb in combs if len(comb) == k]
+                i += 1
+            else:
+                break
+        return combs[i:]

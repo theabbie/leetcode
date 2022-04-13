@@ -9,17 +9,12 @@ class Solution:
         prev = slow
         fast = head
         n = 0
-        while fast and fast.next and fast.next.next:
+        while fast and fast.next:
             prev = slow
             slow = slow.next
             fast = fast.next.next
-            n += 2
-        if fast and fast.next:
             n += 1
         if n == 0:
             return None
-        if n % 2 == 0:
-            prev.next = slow.next
-        else:
-            slow.next = slow.next.next
+        prev.next = slow.next
         return head

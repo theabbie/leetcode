@@ -3,13 +3,14 @@ class Solution:
         ctr = 0
         total = [ctr]
         for num in nums:
-            ctr = (ctr + num) % k
+            ctr += num
             total.append(ctr)
         exists = {}
         for i, f in enumerate(total):
-            if f in exists:
-                if i - exists[f] >= 2:
+            rem = f % k
+            if rem in exists:
+                if i - exists[rem] >= 2:
                     return True
             else:
-                exists[f] = i
+                exists[rem] = i
         return False

@@ -1,7 +1,9 @@
+from collections import defaultdict
+
 class Solution:
     def maximalNetworkRank(self, n: int, roads: List[List[int]]) -> int:
         l = len(roads)
-        edges = [set() for _ in range(n)]
+        edges = defaultdict(set)
         for k in range(l):
             a, b = roads[k]
             edges[a].add(k)

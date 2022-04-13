@@ -1,8 +1,13 @@
+import heapq
+
 class Solution:
     def minPairSum(self, nums: List[int]) -> int:
-        nums.sort()
+        minheap = []
+        maxheap = []
+        for num in nums:
+            heapq.heappush(minheap, num)
+            heapq.heappush(maxheap, -num)
         n = len(nums)
-        maxSum = float('-inf')
-        for i in range(n // 2):
-            maxSum = max(maxSum, nums[i] + nums[n - 1 - i])
-        return maxSum
+        smallest = heapq.nlargest(n // 2, minheap)
+        biggest = heapq.nlargest(n // 2, maxheap)
+        return max(smallest[i] - biggest[i] for i in range(n // 2))

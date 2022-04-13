@@ -13,7 +13,8 @@ class Solution:
             else:
                 checkins[name] = [time]
         op = []
-        for name in sorted(checkins.keys()):
+        names = sorted(checkins.keys())
+        for name in names:
             m = len(checkins[name])
             alert = False
             for i in range(m):

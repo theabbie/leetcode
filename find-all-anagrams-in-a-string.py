@@ -2,15 +2,15 @@ class Solution:
     def findAnagrams(self, s: str, p: str) -> List[int]:
         np = len(p)
         ns = len(s)
+        op = []
         if np > ns:
-            return []
+            return op
         pctr = [0] * 26
         for c in p:
             pctr[ord(c) - ord('a')] += 1
         sctr = [0] * 26
         for i in range(np):
             sctr[ord(s[i]) - ord('a')] += 1
-        op = []
         i = 0
         while i < ns - np:
             if pctr == sctr:

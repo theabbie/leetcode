@@ -3,7 +3,6 @@ class Solution:
         k = len(original)
         if k != m * n:
             return []
-        op = [[0 for i in range(n)] for i in range(m)]
-        for i in range(k):
-            op[i // n][i % n] = original[i]
-        return op
+        for i in range(m):
+            original.extend([original[i * n : (i + 1) * n]])
+        return original[k:]

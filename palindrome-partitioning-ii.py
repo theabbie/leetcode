@@ -18,7 +18,6 @@ class Solution:
         mincuts = n - i - 1
         for j in range(i + 1, n + 1):
             if self.isPalindrome(s, i, j):
-                curr = s[i:j]
                 val = self.mcuts(s, j, n)
                 mincuts = min(mincuts, 1 + val)
         self.cache[i] = mincuts
@@ -28,6 +27,4 @@ class Solution:
         self.cache = {}
         self.PalCache = {}
         n = len(s)
-        if self.isPalindrome(s, 0, n):
-            return 0
         return self.mcuts(s, 0, n)

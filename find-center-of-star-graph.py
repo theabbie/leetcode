@@ -12,6 +12,7 @@ class Solution:
                 graph[a][0] += 1
             else:
                 graph[b] = [1, 1]
+        k = len(graph) - 1
         for node in graph:
-            if graph[node][1] == len(graph) - 1:
+            if graph[node][1] == k:
                 return node

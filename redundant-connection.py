@@ -12,18 +12,11 @@ class Solution:
         numnodes = 0
         for a, b in edges:
             numnodes = max(numnodes, a, b)
-            if a in graph:
-                graph[a].add(b)
-            else:
-                graph[a] = {b}
-            if b in graph:
-                graph[b].add(a)
-            else:
-                graph[b] = {a}
+            graph[a] = graph.get(a, set()).union({b})
+            graph[b] = graph.get(b, set()).union({a})
         for k in range(n - 1, -1, -1):
             a, b = edges[k]
             visited = set()
             self.DFS(a, graph, visited, a, b)
-            print(visited)
             if len(visited) == numnodes:
                 return edges[k]

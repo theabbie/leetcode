@@ -4,13 +4,12 @@ class SummaryRanges:
 
     def __init__(self):
         self.nums = []
+        self.dup = set()
 
     def addNum(self, val: int) -> None:
-        n = len(self.nums)
-        pos = bisect.bisect_left(self.nums, val)
-        pos = min(pos, n - 1)
-        if n == 0 or self.nums[pos] != val:
+        if val not in self.dup:
             bisect.insort(self.nums, val)
+            self.dup.add(val)
 
     def getIntervals(self) -> List[List[int]]:
         nums = self.nums
@@ -19,17 +18,11 @@ class SummaryRanges:
             return []
         ranges = [[nums[0]]]
         for i in range(1, n):
-            if nums[i] == ranges[-1][-1] + 1:
+            if nums[i] == ranges[-1][-1] or nums[i] == ranges[-1][-1] + 1:
                 ranges[-1].append(nums[i])
             else:
                 ranges.append([nums[i]])
-        m = len(ranges)
-        for i in range(m):
-            if len(ranges[i]) == 1:
-                ranges[i] = [ranges[i][0], ranges[i][0]]
-            else:
-                ranges[i] = [ranges[i][0], ranges[i][-1]]
-        return ranges
+        return [[r[0], r[-1]] for r in ranges]
 
 
 # Your SummaryRanges object will be instantiated and called as such:

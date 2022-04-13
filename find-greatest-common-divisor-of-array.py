@@ -6,4 +6,9 @@ class Solution:
             return self.gcd(b, a % b)
     
     def findGCD(self, nums: List[int]) -> int:
-        return self.gcd(min(nums), max(nums))
+        minNum = float('inf')
+        maxNum = float('-inf')
+        for num in nums:
+            minNum = min(minNum, num)
+            maxNum = max(maxNum, num)
+        return self.gcd(minNum, maxNum)

@@ -5,9 +5,9 @@ class Solution:
         op = ""
         for c in s:
             if c == " " or c == "":
-                op += chunk[::-1]
+                op += chunk
                 op += c
                 chunk = ""
             else:
-                chunk += c
+                chunk = c + chunk
         return op

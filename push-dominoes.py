@@ -1,9 +1,7 @@
 class Solution:
     def pushDominoes(self, dominoes: str) -> str:
         n = len(dominoes)
-        dominoes = list(dominoes)
         encoded = []
-        op = ""
         i = 0
         while i < n:
             ctr = 1
@@ -11,33 +9,18 @@ class Solution:
                 i += 1
                 ctr += 1
             i += 1
-            encoded.append((dominoes[i - 1], ctr))
+            encoded.append([dominoes[i - 1], ctr])
         k = len(encoded)
         for i in range(k):
             c, ctr = encoded[i]
+            left = encoded[i - 1][0] if i > 0 else "L"
+            right = encoded[i + 1][0] if i < k - 1 else "R"
             if c == ".":
-                if i == 0:
-                    if i < k - 1 and encoded[i + 1][0] == "L":
-                        op += "L" * ctr
-                    else:
-                        op += "." * ctr
-                elif i == k - 1:
-                    if i > 0 and encoded[i - 1][0] == "R":
-                        op += "R" * ctr
-                    else:
-                        op += "." * ctr
-                else:
-                    if encoded[i - 1][0] == "L" and encoded[i + 1][0] == "R":
-                        op += "." * ctr
-                    if encoded[i - 1][0] == "L" and encoded[i + 1][0] == "L":
-                        op += "L" * ctr
-                    if encoded[i - 1][0] == "R" and encoded[i + 1][0] == "R":
-                        op += "R" * ctr
-                    if encoded[i - 1][0] == "R" and encoded[i + 1][0] == "L":
-                        l = ctr // 2
-                        mid = ctr - 2 * (ctr // 2)
-                        r = ctr // 2
-                        op += "R" * l + "." * mid + "L" * r
-            else:
-                op += c * ctr
-        return op
+                if left == right:
+                    encoded[i][0] = left
+                if left == "R" and right == "L":
+                    l = r = ctr >> 1
+                    mid = ctr & 1
+                    encoded[i][0] = "R" * l + "." * mid + "L" * r
+                    encoded[i][1] = 1
+        return "".join(c * ctr for c, ctr in encoded)

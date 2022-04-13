@@ -18,6 +18,4 @@ class Solution:
             return True
         if not root or not subRoot:
             return False
-        if self.isSameTree(root.left, subRoot) or self.isSameTree(root.right, subRoot):
-            return True
         return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
