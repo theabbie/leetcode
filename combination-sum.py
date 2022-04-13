@@ -1,14 +1,14 @@
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        n = len(candidates)
-        op = []
-        combs = [([item], item) for item in candidates]
+        op = set()
+        combs = [[item] for item in candidates]
         while len(combs) > 0:
-            comb, currsum = combs.pop(0)
-            if currsum == target:
-                op.append(comb)
+            comb = combs.pop(0)
+            currsum = sum(comb)
+            if sum(comb) == target:
+                op.add(tuple(sorted(comb)))
             for item in candidates:
-                newsum = currsum + item
-                if newsum <= target and item >= comb[-1]:
-                    combs.append((comb + [item], newsum))
-        return op
+                if currsum + item <= target:
+                    combs.append(comb + [item])
+        return [list(item) for item in op]
+        
