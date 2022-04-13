@@ -11,14 +11,16 @@ class Solution:
         if not node:
             return node
         nodemap = {}
-        nodemap[node.val] = Node(val = node.val)
+        nodemap[node] = Node(val = node.val)
         paths = [node]
         while len(paths) > 0:
             curr = paths.pop()
-            currcopy = nodemap[curr.val]
+            currcopy = nodemap[curr]
             for nbr in curr.neighbors:
-                if nbr.val not in nodemap:
+                if nbr in nodemap:
+                    currcopy.neighbors.append(nodemap[nbr])
+                else:
                     paths.append(nbr)
-                    nodemap[nbr.val] = Node(val = nbr.val)
-                currcopy.neighbors.append(nodemap[nbr.val])
-        return nodemap[node.val]
+                    nodemap[nbr] = Node(val = nbr.val)
+                    currcopy.neighbors.append(nodemap[nbr])
+        return nodemap[node]

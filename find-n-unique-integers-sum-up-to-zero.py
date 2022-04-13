@@ -1,8 +1,13 @@
 class Solution:
     def sumZero(self, n: int) -> List[int]:
-        if n == 1:
-            return [0]
-        if n == 2:
-            return [-1, 1]
-        prev = self.sumZero(n - 2)
-        return [prev[0] - 1] + prev + [prev[-1] + 1]
+        op = []
+        if n % 2 == 0:
+            for i in range(1, 1 + (n // 2)):
+                op.append(i)
+                op.append(-i)
+        else:
+            op.append(0)
+            for i in range(1, 1 + (n - 1) // 2):
+                op.append(i)
+                op.append(-i)
+        return op
