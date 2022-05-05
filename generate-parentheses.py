@@ -1,15 +1,14 @@
 class Solution:
+    def generate(self, s, ctr, rem, ans):
+        if rem == 0 and ctr == 0:
+            ans.add(s)
+        if rem > 0 and ctr >= 0:
+            if ctr < rem:
+                self.generate(s + '(', ctr + 1, rem - 1, ans)
+            if ctr > 0:
+                self.generate(s + ')', ctr - 1, rem - 1, ans)
+    
     def generateParenthesis(self, n: int) -> List[str]:
-        pars = [("(", [1])]
-        ans = []
-        i = 0
-        while i < len(pars):
-            curr, currstack = pars[i]
-            if len(curr) == 2 * n and len(currstack) == 0:
-                ans.append(curr)
-            if len(curr) < 2 * n:
-                if len(currstack) > 0 and currstack[-1] == 1:
-                    pars.append((curr + ")", currstack[:-1]))
-                pars.append((curr + "(", currstack + [1]))
-            i += 1
-        return ans
+        ans = set()
+        self.generate("", 0, 2 * n, ans)
+        return list(ans)
