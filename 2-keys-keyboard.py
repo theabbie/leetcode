@@ -1,4 +1,7 @@
+from functools import lru_cache
+
 class Solution:
+    @lru_cache(maxsize=None)
     def minSteps(self, n: int, k = 1, clipboard = 0) -> int:
         if k == n:
             return 0
