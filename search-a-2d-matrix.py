@@ -6,12 +6,13 @@ class Solution:
         end = m * n - 1
         while beg <= end:
             mid = (beg + end) // 2
-            curr = matrix[mid // n][mid % n]
-            if curr == target:
+            i = mid // n
+            j = mid % n
+            if matrix[i][j] == target:
                 return True
             elif beg == end:
                 break
-            elif curr < target:
+            elif matrix[i][j] < target:
                 beg = mid + 1
             else:
                 end = mid
