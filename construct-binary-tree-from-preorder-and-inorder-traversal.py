@@ -5,16 +5,17 @@
 #         self.left = left
 #         self.right = right
 class Solution:
+    def getRoot(self, p, q):
+        return min((i for i in range(p, q)), key = lambda x: self.valIndex[self.inorder[x]])
+    
     def buildTreeRec(self, p, q):
         if p < q:
             root = TreeNode()
-            currRoot = min((i for i in range(p, q)), key = lambda x: self.valIndex[self.inorder[x]])
+            currRoot = self.getRoot(p, q)
             root.val = self.inorder[currRoot]
             if currRoot > p:
-                root.left = TreeNode()
                 root.left = self.buildTreeRec(p, currRoot)
             if currRoot < q - 1:
-                root.right = TreeNode()
                 root.right = self.buildTreeRec(currRoot + 1, q)
             return root
     

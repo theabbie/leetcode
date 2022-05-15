@@ -1,13 +1,21 @@
+import bisect
+
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-        intervals.sort(key = lambda x: x[0])
-        n = len(intervals)
-        i = 0
-        while i < len(intervals) - 1:
-            if intervals[i][1] >= intervals[i + 1][0]:
-                if intervals[i][1] <= intervals[i + 1][1]:
-                    intervals[i][1] = intervals[i + 1][1]
-                intervals.pop(i + 1)
-            else:
-                i += 1
+        points = []
+        for l, r in intervals:
+            bisect.insort(points, (l, 1))
+            bisect.insort(points, (r + 1, -1))
+        p = 0
+        prev = None
+        intervals = []
+        for x, diff in points:
+            p += diff
+            if p == 0 and prev != None:
+                if diff == 1:
+                    intervals.append([prev, x])
+                else:
+                    intervals.append([prev, x - 1])
+            if p == 1 and p - diff == 0:
+                prev = x
         return intervals
