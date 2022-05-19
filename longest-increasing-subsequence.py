@@ -1,36 +1,22 @@
-# class Solution:
-#     def lisRec(self, nums, i, n):
-#         if i == n - 1:
-#             return 1
-#         maxSeq = 0
-#         for j in range(i + 1, n):
-#             if nums[j] > nums[i]:
-#                 msxSeq = max(maxSeq, 1 + self.lisRec(nums, j, n))
-#             else:
-#                 msxSeq = max(maxSeq, self.lisRec(nums, j, n))
-#         return maxSeq
-            
-#     def lengthOfLIS(self, nums: List[int]) -> int:
-#         return self.lisRec(nums, 0, len(nums))
-
 class Solution:
-    def lislen(self, nums, i, n):
-        if i == n - 1:
+    def lis(self, nums, i):
+        if i == 0:
             return 1
-        if i in self.cache:
+        if self.cache[i] != -1:
             return self.cache[i]
         mlen = 1
-        for j in range(i + 1, n):
-            if i == -1 or nums[j] > nums[i]:
-                currlen = self.lislen(nums, j, n)
-                if i == -1:
-                    mlen = max(mlen, currlen)
-                else:
-                    mlen = max(mlen, 1 + currlen)
+        for j in range(i):
+            if nums[j] < nums[i]:
+                curr = 1 + self.lis(nums, j)
+                mlen = max(mlen, curr)
         self.cache[i] = mlen
         return mlen
     
     def lengthOfLIS(self, nums: List[int]) -> int:
         n = len(nums)
-        self.cache = {}
-        return self.lislen(nums, -1, n)
+        self.cache = [-1] * n
+        mlen = 1
+        for i in range(n):
+            curr = self.lis(nums, i)
+            mlen = max(mlen, curr)
+        return mlen
