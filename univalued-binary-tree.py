@@ -5,17 +5,12 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def inorder(self, root):
-        if root:
-            self.inorder(root.left)
-            if self.latest != None:
-                if root.val != self.latest:
-                    self.uni = False
-            self.latest = root.val
-            self.inorder(root.right)
-    
     def isUnivalTree(self, root: Optional[TreeNode]) -> bool:
-        self.latest = None
-        self.uni = True
-        self.inorder(root)
-        return self.uni
+        l = True
+        r = True
+        if root:
+            if root.left and (root.val != root.left.val or not self.isUnivalTree(root.left)):
+                l = False
+            if root.right and (root.val != root.right.val or not self.isUnivalTree(root.right)):
+                r = False
+        return l and r
