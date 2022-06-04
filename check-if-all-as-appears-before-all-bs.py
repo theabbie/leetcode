@@ -1,14 +1,10 @@
 class Solution:
     def checkString(self, s: str) -> bool:
-        a = []
-        b = []
-        for i, c in enumerate(s):
-            if c == 'a':
-                a.append(i)
+        bseen = False
+        for c in s:
             if c == 'b':
-                b.append(i)
-        for i in a:
-            for j in b:
-                if i > j:
+                bseen = True
+            if c == 'a':
+                if bseen:
                     return False
         return True
