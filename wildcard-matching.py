@@ -1,16 +1,31 @@
 class Solution:
+    def isSame(self, a, b):
+        if a == "?" or b == "?":
+            return True
+        return a == b
+    
+    def isMatchRec(self, s, p, i, j, m, n):
+        if j >= n:
+            return i >= m
+        if i >= m:
+            if j >= n:
+                return True
+        if (i, j) in self.cache:
+            return self.cache[(i, j)]
+        if i >= m:    
+            res = p[j] == "*" and self.isMatchRec(s, p, i, j + 1, m, n)
+            self.cache[(i, j)] = res
+            return res
+        if p[j] == "*":
+            res = self.isMatchRec(s, p, i, j + 1, m, n) or self.isMatchRec(s, p, i + 1, j, m, n)
+            self.cache[(i, j)] = res
+            return res
+        res = self.isSame(s[i], p[j]) and self.isMatchRec(s, p, i + 1, j + 1, m, n)
+        self.cache[(i, j)] = res
+        return res
+    
     def isMatch(self, s: str, p: str) -> bool:
         m = len(s)
         n = len(p)
-        T = [[False for i in range(n + 1)] for j in range(m + 1)]
-        T[0][0] = True
-        for j in range(1, n + 1):
-            if p[j - 1] == "*":
-                T[0][j] = T[0][j - 1]
-        for i in range(1, m + 1):
-            for j in range(1, n + 1):
-                if p[j - 1] == '?' or s[i - 1] == p[j - 1]:
-                    T[i][j] = T[i - 1][j - 1]
-                elif p[j - 1] == "*":
-                    T[i][j] = T[i][j - 1] or T[i - 1][j]
-        return T[m][n]
+        self.cache = {}
+        return self.isMatchRec(s, p, 0, 0, m, n)
