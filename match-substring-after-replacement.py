@@ -2,12 +2,6 @@ from collections import defaultdict
 import re
 
 class Solution:
-    def DFS(self, graph, node, v):
-        v.add(node)
-        for j in graph[node]:
-            if j not in v:
-                self.DFS(graph, j, v)
-    
     def matchReplacement(self, s: str, sub: str, mappings: List[List[str]]) -> bool:
         reachable = defaultdict(set)
         for a, b in mappings:
