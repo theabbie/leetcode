@@ -1,54 +1,44 @@
 class Node:
-    def __init__(self, val=None, children=[], end=False):
+    def __init__(self, val, children, words):
         self.val = val
         self.children = children
-        self.end = end
-        self.words = set()
+        self.words = words
 
 class Trie:
     def __init__(self):
-        self.root = Node(val=None, children=[])
+        self.root = Node(None, {}, set())
 
-    def insert(self, word: str, pos) -> None:
+    def insert(self, word, pos) -> None:
         n = len(word)
         curr = self.root
         for i, c in enumerate(word):
-            found = False
-            for node in curr.children:
-                if node.val == c:
-                    curr = node
-                    curr.words.add(pos)
-                    found = True
-                    break
-            if not found:
-                newcurr = Node(val=c, children=[])
-                newcurr.words.add(pos)
-                curr.children.append(newcurr)
+            if c in curr.children:
+                curr = curr.children[c]
+            else:
+                newcurr = Node(c, {}, set())
+                curr.children[c] = newcurr
                 curr = newcurr
-        curr.end = True
-
-    def startsWith(self, prefix: str):
+            curr.words.add(pos)
+        
+    def startsWith(self, prefix, res):
         n = len(prefix)
         curr = self.root
         for i, c in enumerate(prefix):
-            found = False
-            for node in curr.children:
-                if node.val == c:
-                    curr = node
-                    found = True
-                    break
-            if not found:
-                return []
+            if c in curr.children:
+                curr = curr.children[c]
+                res.append(curr.words)
+            else:
+                return set()
         return curr.words
 
 class Solution:
     def suggestedProducts(self, products: List[str], searchWord: str) -> List[List[str]]:
-        trie = Trie()
-        for i, p in enumerate(products):
-            trie.insert(p, i)
         n = len(searchWord)
-        op = []
-        for i in range(1, n + 1):
-            res = trie.startsWith(searchWord[:i])
-            op.append(sorted([products[i] for i in res])[:3])
-        return op
+        trie = Trie()
+        for i, product in enumerate(products):
+            trie.insert(product, i)
+        res = []
+        trie.startsWith(searchWord, res)
+        while len(res) < n:
+            res.append({})
+        return [sorted([products[i] for i in curr])[:3] for curr in res]

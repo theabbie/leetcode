@@ -20,13 +20,13 @@ h = getHeight(0)
 cols = (1 << h) - 1
 rows = h
 op = [[null for i in range(cols)] for j in range(rows)]
-nodes = [(0, 0, 0, cols)]
+nodes = [(1, 0, 0, cols)]
 while len(nodes) > 0:
     curr, l, a, b = nodes.pop()
     if curr < n:
         i = (a + b) // 2
-        op[l][i] = ("{:"+ str(mdigits) +"}").format(tree[curr])
-        nodes.append((2 * curr + 1, l + 1, a, i))
-        nodes.append((2 * curr + 2, l + 1, i, b))
+        op[l][i] = ("{:"+ str(mdigits) +"}").format(tree[curr - 1])
+        nodes.append((2 * curr, l + 1, a, i))
+        nodes.append((2 * curr + 1, l + 1, i, b))
 
 print("\n".join(["".join(row) + "\n" * mdigits for row in op]))
