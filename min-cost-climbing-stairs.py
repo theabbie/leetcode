@@ -1,16 +1,14 @@
 class Solution:
-    memo = {}
-    
-    def minCostClimbingStairsRec(self, i, cost):
-        if i > len(cost) - 1:
+    def mcost(self, cost, i, n):
+        if i >= n:
             return 0
-        if i == len(cost) - 1:
-            return cost[i]
-        if i not in self.memo:
-            self.memo[i] = cost[i] + min(self.minCostClimbingStairsRec(i + 1, cost), self.minCostClimbingStairsRec(i + 2, cost))
-        return self.memo[i]
+        if i in self.cache:
+            return self.cache[i]
+        res = cost[i] + min(self.mcost(cost, i + 1, n), self.mcost(cost, i + 2, n))
+        self.cache[i] = res
+        return res
     
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-        self.memo = {}
-        return min(self.minCostClimbingStairsRec(0, cost), self.minCostClimbingStairsRec(1, cost))
-        
+        self.cache = {}
+        n = len(cost)
+        return min(self.mcost(cost, 0, n), self.mcost(cost, 1, n))
