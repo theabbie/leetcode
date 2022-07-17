@@ -5,17 +5,20 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def inorder(self, root, l, x, y, path):
-        if root:
-            if root.left:
-                self.inorder(root.left, l + 1, x, y, path[-1:] + [root.left.val])
-            if root.val == x:
-                self.xnode = (l, path[-2] if len(path) >= 2 else None)
-            if root.val == y:
-                self.ynode = (l, path[-2] if len(path) >= 2 else None)
-            if root.right:
-                self.inorder(root.right, l + 1, x, y, path[-1:] + [root.right.val])
-    
     def isCousins(self, root: Optional[TreeNode], x: int, y: int) -> bool:
-        self.inorder(root, 0, x, y, [root.val])
-        return self.xnode[0] == self.ynode[0] and self.xnode[1] != self.ynode[1]
+        nodes = [(root, 0, None)]
+        i = 0
+        xh, xp, yh, yp = [None] * 4
+        while i < len(nodes):
+            curr, l, parent = nodes[i]
+            if curr:
+                if curr.val == x:
+                    xh = l
+                    xp = parent
+                if curr.val == y:
+                    yh = l
+                    yp = parent
+                nodes.append((curr.left, l + 1, curr.val))
+                nodes.append((curr.right, l + 1, curr.val))
+            i += 1
+        return xh == yh and xp != yp
