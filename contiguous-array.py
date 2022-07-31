@@ -1,19 +1,13 @@
 class Solution:
     def findMaxLength(self, nums: List[int]) -> int:
         n = len(nums)
-        ctr = 0
-        freq = [0]
-        maxLen = 0
-        for num in nums:
-            if num == 1:
-                ctr += 1
+        seen = {0:-1}
+        curr = 0
+        mlen = 0
+        for i in range(n):
+            curr += 2 * nums[i] - 1
+            if curr in seen:
+                mlen = max(mlen, i - seen[curr])
             else:
-                ctr -= 1
-            freq.append(ctr)
-        exists = {}
-        for i, f in enumerate(freq):
-            if f in exists:
-                maxLen = max(maxLen, i - exists[f])
-            else:
-                exists[f] = i
-        return maxLen
+                seen[curr] = i
+        return mlen
