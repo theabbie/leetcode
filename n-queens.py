@@ -1,19 +1,22 @@
 class Solution:
-    def getAllPos(self, usedCols, usedPosDiag, usedNegDiag, i, n):
+    def solve(self, board, i, n, usedRows, usedPosDiag, usedNegDiag, res):
         if i >= n:
-            return [[]]
-        op = []
+            res.append(["".join(row) for row in board])
+            return
         for j in range(n):
-            if j not in usedCols and (i + j) not in usedPosDiag and (i - j) not in usedNegDiag:
-                val = self.getAllPos(usedCols.union({j}), usedPosDiag.union({i + j}), usedNegDiag.union({i - j}), i + 1, n)
-                op += [[j] + v for v in val]
-        return op
-    
-    def getRow(self, i, n):
-        val = ["."] * n
-        val[i] = "Q"
-        return "".join(val)
+            if j not in usedRows and i - j not in usedPosDiag and i + j not in usedNegDiag:
+                usedRows.add(j)
+                usedPosDiag.add(i - j)
+                usedNegDiag.add(i + j)
+                board[i][j] = "Q"
+                self.solve(board, i + 1, n, usedRows, usedPosDiag, usedNegDiag, res)
+                board[i][j] = "."
+                usedRows.remove(j)
+                usedPosDiag.remove(i - j)
+                usedNegDiag.remove(i + j)
     
     def solveNQueens(self, n: int) -> List[List[str]]:
-        queens = self.getAllPos(set(), set(), set(), 0, n)
-        return [[self.getRow(i, n) for i in q] for q in queens]
+        board = [["."] * n for _ in range(n)]
+        res = []
+        self.solve(board, 0, n, set(), set(), set(), res)
+        return res

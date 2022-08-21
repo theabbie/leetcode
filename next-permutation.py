@@ -2,20 +2,11 @@ class Solution:
     def nextPermutation(self, nums: List[int]) -> None:
         n = len(nums)
         i = n - 1
-        while i > 0:
-            if nums[i - 1] < nums[i]:
-                break
+        while i > 0 and nums[i - 1] >= nums[i]:
             i -= 1
-        if i == 0:
-            nums.reverse()
-            return
-        mdiff = float('inf')
-        closest = None
-        for j in range(i, n):
-            if nums[j] > nums[i - 1] and nums[j] - nums[i - 1] <= mdiff:
-                mdiff = nums[j] - nums[i - 1]
-                closest = j
-        if closest:
+        if i > 0:
+            fn = lambda k: (float('inf') if nums[k] <= nums[i - 1] else nums[k], -k)
+            closest = min(range(i, n), key = fn)
             nums[i - 1], nums[closest] = nums[closest], nums[i - 1]
-        for j in range(i, (i + n) // 2):
-            nums[j], nums[n - j + i - 1] = nums[n - j + i - 1], nums[j]
+        for p in range((n - i) // 2):
+            nums[i + p], nums[n - p - 1] = nums[n - p - 1], nums[i + p]
