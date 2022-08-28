@@ -1,4 +1,7 @@
 class Solution:
     def isPowerOfFour(self, n: int) -> bool:
-        bi = "{:b}".format(n)
-        return n > 0 and bi.count("1") == 1 and bi[::-1].index("1") % 2 == 0 
+        if n <= 0:
+            return False
+        if n == 1:
+            return True
+        return not n & 3 and self.isPowerOfFour(n >> 2)
