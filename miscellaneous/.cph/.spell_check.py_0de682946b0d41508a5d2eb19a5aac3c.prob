@@ -1,0 +1,1 @@
+{"name":"Local: spell_check","url":"/home/theabbie/Desktop/leetcode/miscellaneous/spell_check.py","tests":[{"id":1662277092789,"input":"1\n5\nTimur","output":"YES"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/theabbie/Desktop/leetcode/miscellaneous/spell_check.py","group":"local","local":true}

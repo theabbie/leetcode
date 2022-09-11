@@ -1,28 +1,29 @@
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
 class Solution:
     def smallestFromLeaf(self, root: Optional[TreeNode]) -> str:
-        paths = [(root, [root.val] if root else [])]
-        i = 0
-        smallest = None
-        while i < len(paths):
-            curr, val = paths[i]
-            if curr:
-                if not curr.left and not curr.right:
-                    n = len(val)
-                    currval = "".join(["abcdefghijklmnopqrstuvwxyz"[val[i]] for i in range(n - 1, -1, -1)])
-                    if smallest:
-                        if currval < smallest:
-                            smallest = currval
-                    else:
-                        smallest = currval
-                if curr.left:
-                    paths.append((curr.left, val + [curr.left.val]))
-                if curr.right:
-                    paths.append((curr.right, val + [curr.right.val]))
-            i += 1
-        return smallest
+        ch = lambda i: chr(ord("a") + i)
+        pos = {}
+        def inorder(root, i):
+            if root:
+                inorder(root.left, 2 * i)
+                pos[i] = root.val
+                inorder(root.right, 2 * i + 1)
+        inorder(root, 1)
+        def getmin(i, j):
+            oi, oj = i, j
+            while i and j:
+                if pos[i] < pos[j]:
+                    return oi
+                elif pos[i] > pos[j]:
+                    return oj
+                i = i // 2
+                j = j // 2
+            return oj or oi
+        res = 0
+        for i in pos:
+            if 2 * i not in pos and 2 * i + 1 not in pos:
+                res = getmin(res, i)
+        smallest = []
+        while res:
+            smallest.append(ch(pos[res]))
+            res = res // 2
+        return "".join(smallest)
