@@ -1,9 +1,12 @@
 class Solution:
     def increasingTriplet(self, nums: List[int]) -> bool:
         n = len(nums)
-        minval, maxval = min(nums), max(nums)
-        for i in range(1, n - 1):
-            if nums[i] > minval and nums[i] < maxval:
-                if min(nums[:i]) < nums[i] and nums[i] < max(nums[i+1:]):
-                    return True
+        biggest = [float('-inf')] * (n + 1)
+        for i in range(n - 1, -1, -1):
+            biggest[i] = max(nums[i], biggest[i + 1])
+        minyet = float('inf')
+        for i in range(n):
+            if minyet < nums[i] < biggest[i + 1]:
+                return True
+            minyet = min(minyet, nums[i])
         return False
