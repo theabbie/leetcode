@@ -1,9 +1,21 @@
-import bisect
-
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
-        nums.sort()
-        numset = set(nums)
-        for num in numset:
-            if bisect.bisect_left(nums, num) + 1 == bisect.bisect_right(nums, num):
-                return num
+        bits = [0] * 32
+        for el in nums:
+            for b in range(32):
+                if abs(el) & (1 << b):
+                    bits[b] += 1
+        res = 0
+        for b in range(32):
+            if bits[b] % 3 == 1:
+                res |= 1 << b
+        a = 0
+        b = 0
+        for el in nums:
+            if el == res:
+                a += 1
+            if -el == res:
+                b += 1
+        if a == 1:
+            return res
+        return -res

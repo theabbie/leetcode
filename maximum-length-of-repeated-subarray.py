@@ -1,17 +1,24 @@
 class Solution:
-    def LongestCommonSubarray(self, X, Y, m, n):
-        common = [[0 for k in range(n+1)] for l in range(m+1)]
-        result = 0
-        for i in range(m + 1):
-            for j in range(n + 1):
-                if (i == 0 or j == 0):
-                    common[i][j] = 0
-                elif (X[i-1] == Y[j-1]):
-                    common[i][j] = common[i-1][j-1] + 1
-                    result = max(result, common[i][j])
-                else:
-                    common[i][j] = 0
-        return result
+    def isCommon(self, X, Y, m, n, l):
+        xset = set()
+        for i in range(m - l + 1):
+            xset.add(tuple(X[i:i+l]))
+        for i in range(n - l + 1):
+            if tuple(Y[i:i+l]) in xset:
+                return True
+        return False
     
     def findLength(self, nums1: List[int], nums2: List[int]) -> int:
-        return self.LongestCommonSubarray(nums1, nums2, len(nums1), len(nums2))
+        m = len(nums1)
+        n = len(nums2)
+        beg = 0
+        end = min(m, n)
+        res = beg
+        while beg <= end:
+            mid = (beg + end) // 2
+            if self.isCommon(nums1, nums2, m, n, mid):
+                res = mid
+                beg = mid + 1
+            else:
+                end = mid - 1
+        return res

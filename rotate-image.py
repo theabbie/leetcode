@@ -1,10 +1,15 @@
 class Solution:
+    def verticalFlip(self, matrix, n):
+        for i in range(n // 2):
+            for j in range(n):
+                matrix[i][j], matrix[n - i - 1][j] = matrix[n - i - 1][j], matrix[i][j]
+    
+    def diagonalFlip(self, matrix, n):
+        for i in range(n):
+            for j in range(i, n):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+    
     def rotate(self, matrix: List[List[int]]) -> None:
         n = len(matrix)
-        cache = {}
-        for i in range(n):
-            for j in range(n):
-                cache[(i, j)] = matrix[i][j]
-        for i in range(n):
-            for j in range(n):
-                matrix[j][n - i - 1] = cache[(i, j)]
+        self.verticalFlip(matrix, n)
+        self.diagonalFlip(matrix, n)
