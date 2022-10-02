@@ -1,6 +1,4 @@
 class Solution:
-    memo = {}
-    
     def isCorrect(self, n):
         if n[0] == "0":
             return False

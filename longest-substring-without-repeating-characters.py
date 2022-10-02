@@ -1,17 +1,16 @@
+from collections import Counter
+
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        i = 0
-        j = i
-        longest = 0
         n = len(s)
-        dup = {}
-        while j < n:
-            if s[j] not in dup:
-                dup[s[j]] = j
-                j += 1
-                longest = max(longest, j - i)
-            else:
-                i = dup[s[j]] + 1
-                j = i
-                dup = {}
-        return longest
+        i = 0
+        exists = Counter()
+        mlen = 0
+        for j in range(n):
+            exists[s[j]] += 1
+            while i < j and max(exists.values()) > 1:
+                exists[s[i]] -= 1
+                i += 1
+            if max(exists.values()) <= 1:
+                mlen = max(mlen, j - i + 1)
+        return mlen

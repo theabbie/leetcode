@@ -4,11 +4,13 @@ class Solution:
         dividend = abs(dividend)
         divisor = abs(divisor)
         res = 0
-        while dividend >= divisor:
-            temp, i = divisor, 1
-            while dividend >= temp:
-                dividend -= temp
-                res += i
-                temp = temp << 1
-                i = i << 1
+        beg = 0
+        end = dividend
+        while beg <= end:
+            mid = (beg + end) // 2
+            if divisor * mid <= dividend:
+                res = mid
+                beg = mid + 1
+            else:
+                end = mid - 1
         return min(max(-2147483648, sign * res), 2147483647)
