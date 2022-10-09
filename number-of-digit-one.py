@@ -1,33 +1,27 @@
 class Solution:
-    def count(self, pos, cnt, tight, nonz, num, d, K, dp):
-        if pos == len(num):
-            if cnt == K:
-                return 1
-            return 0
-        if dp[pos][cnt][tight][nonz] != -1:
-            return dp[pos][cnt][tight][nonz]
-        ans = 0
-        limit = 9 if tight else num[pos]
-        for dig in range(limit + 1):
-            currCnt = cnt
-            if dig == d:
-                if d != 0 or not d and nonz:
-                    currCnt += 1
-            currTight = tight
-            if dig < num[pos]:
-                currTight = 1
-            ans += self.count(pos + 1, currCnt, currTight, (nonz or dig != 0), num, d, K, dp)
-        dp[pos][cnt][tight][nonz] = ans
-        return dp[pos][cnt][tight][nonz]
+    def digitone(self, curr, i, n, val, tight, cache):
+        if i >= n:
+            return curr
+        key = (curr, i, tight)
+        if key in cache:
+            return cache[key]
+        res = 0
+        maxd = 9
+        if tight:
+            maxd = int(val[i])
+        for d in range(maxd + 1):
+            currtight = False
+            if d == maxd:
+                currtight = tight
+            x = 0
+            if d == 1:
+                x += 1
+            res += self.digitone(curr + x, i + 1, n, val, currtight, cache)
+        if not tight:
+            cache[key] = res
+        return res
     
     def countDigitOne(self, n: int) -> int:
-        digits = []
-        while n:
-            digits.append(n % 10)
-            n //= 10
-        digits.reverse()
-        res = 0
-        for k in range(1, 1 + len(digits)):
-            dp = [[[[-1, -1] for i in range(2)] for j in range(10)] for k in range(10)]
-            res += k * self.count(0, 0, 0, 0, digits, 1, k, dp)
-        return res
+        val = str(n)
+        l = len(val)
+        return self.digitone(0, 0, l, val, True, {})
