@@ -19,4 +19,6 @@ for _ in range(t):
                 chunks[i][1] -= 1
             if i > 0 and chunks[i - 1][0] == "1":
                 chunks[i][1] -= 1
+            if chunks[i][0] == "1":
+                chunks[i][0] = "0"
     print("".join([val * ctr for val, ctr in chunks]))
