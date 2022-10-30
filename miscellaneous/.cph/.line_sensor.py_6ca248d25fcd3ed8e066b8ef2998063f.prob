@@ -1,0 +1,1 @@
+{"name":"Local: line_sensor","url":"/home/theabbie/Desktop/leetcode/miscellaneous/line_sensor.py","tests":[{"id":1666441071699,"input":"3 4\n#..#\n.#.#\n.#.#","output":"1 2 0 3"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/theabbie/Desktop/leetcode/miscellaneous/line_sensor.py","group":"local","local":true}
