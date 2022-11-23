@@ -1,0 +1,1 @@
+{"name":"Local: connect_all_cities","url":"/home/theabbie/Desktop/leetcode/miscellaneous/connect_all_cities.py","tests":[{"id":1669218248870,"input":"2\n4\n4 4 4 4\n3\n2 4 6","output":"12\n6"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/theabbie/Desktop/leetcode/miscellaneous/connect_all_cities.py","group":"local","local":true}

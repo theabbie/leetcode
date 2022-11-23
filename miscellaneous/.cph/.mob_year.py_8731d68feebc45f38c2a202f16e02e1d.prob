@@ -1,0 +1,1 @@
+{"name":"Local: mob_year","url":"/home/theabbie/Desktop/leetcode/miscellaneous/mob_year.py","tests":[{"id":1669213969167,"input":"3\n2 1 4 17\n3 7 5 50\n3 7 5 61","output":"YES\nNO\nYES"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/theabbie/Desktop/leetcode/miscellaneous/mob_year.py","group":"local","local":true}

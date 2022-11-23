@@ -1,0 +1,1 @@
+{"name":"Local: plaindromic_split","url":"/home/theabbie/Desktop/leetcode/miscellaneous/plaindromic_split.py","tests":[{"id":1669216694238,"input":"3\n4\n3 7 6 4\n5\n1 4 5 4 1\n5\n1 2 3 4 5","output":"2\n0\n4"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/theabbie/Desktop/leetcode/miscellaneous/plaindromic_split.py","group":"local","local":true}
