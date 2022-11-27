@@ -29,9 +29,3 @@ class MedianFinder:
             return -left[0]
         if len(left) < len(right):
             return right[0]
-
-
-# Your MedianFinder object will be instantiated and called as such:
-# obj = MedianFinder()
-# obj.addNum(num)
-# param_2 = obj.findMedian()

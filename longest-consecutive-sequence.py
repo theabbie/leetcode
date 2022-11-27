@@ -1,14 +1,27 @@
 class Solution:
+    def find(self, a):
+        if self.parent[a] == a:
+            return a
+        self.parent[a] = self.find(self.parent[a])
+        return self.parent[a]
+
+    def union(self, a, b):
+        u = self.find(a)
+        v = self.find(b)
+        if u != v:
+            self.parent[v] = u
+            self.ctr[u] += self.ctr[v]
+    
     def longestConsecutive(self, nums: List[int]) -> int:
-        nums = sorted(set(nums))
-        n = len(nums)
-        res = 0
-        i = 0
-        while i < n:
-            ctr = 1
-            while i < n - 1 and nums[i] + 1 == nums[i + 1]:
-                ctr += 1
-                i += 1
-            i += 1
-            res = max(res, ctr)
-        return res
+        if len(nums) == 0:
+            return 0
+        vals = set(nums)
+        self.parent = {}
+        self.ctr = {}
+        for el in vals:
+            self.parent[el] = el
+            self.ctr[el] = 1
+        for el in vals:
+            if el - 1 in vals:
+                self.union(el - 1, el)
+        return max(self.ctr.values())

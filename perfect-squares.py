@@ -1,18 +1,17 @@
-import math
+from collections import deque
 
 class Solution:
-    def numSquaresRec(self, n: int) -> int:
-        if n <= 1:
-            return n
-        if n in self.memo:
-            return self.memo[n]
-        root = int(math.sqrt(n))
-        minSquares = float('inf')
-        for k in range(1, root + 1):
-            minSquares = min(minSquares, 1 + self.numSquaresRec(n - k * k))
-        self.memo[n] = minSquares
-        return minSquares
-
     def numSquares(self, n: int) -> int:
-        self.memo = {}
-        return self.numSquaresRec(n)
+        q = deque([(n, 0)])
+        v = {n}
+        while len(q) > 0:
+            curr, d = q.pop()
+            if curr == 0:
+                return d
+            i = 0
+            while i * i <= curr:
+                j = curr - i * i
+                if j not in v:
+                    v.add(j)
+                    q.appendleft((j, d + 1))
+                i += 1
