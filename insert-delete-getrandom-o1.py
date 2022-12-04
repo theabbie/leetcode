@@ -3,26 +3,25 @@ import random
 class RandomizedSet:
 
     def __init__(self):
-        self.set = set()
+        self.vals = []
+        self.pos = {}
 
     def insert(self, val: int) -> bool:
-        if val not in self.set:
-            self.set.add(val)
+        if val not in self.pos:
+            self.vals.append(val)
+            self.pos[val] = len(self.vals) - 1
             return True
         return False
 
     def remove(self, val: int) -> bool:
-        if val in self.set:
-            self.set.remove(val)
+        if val in self.pos:
+            i = self.pos[val]
+            self.pos[self.vals[-1]] = i
+            del self.pos[val]
+            self.vals[i], self.vals[-1] = self.vals[-1], self.vals[i]
+            self.vals.pop()
             return True
         return False
 
     def getRandom(self) -> int:
-        return random.choice(list(self.set))
-
-
-# Your RandomizedSet object will be instantiated and called as such:
-# obj = RandomizedSet()
-# param_1 = obj.insert(val)
-# param_2 = obj.remove(val)
-# param_3 = obj.getRandom()
+        return self.vals[random.randint(0, len(self.vals) - 1)]

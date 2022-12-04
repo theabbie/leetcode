@@ -6,11 +6,11 @@ class Solution:
         res = []
         q = deque()
         for i in range(n):
-            while len(q) > 0 and q[0] <= i - k:
-                q.popleft()
-            while len(q) > 0 and nums[i] > nums[q[-1]]:
+            while len(q) > 0 and q[-1] <= i - k:
                 q.pop()
-            q.append(i)
+            while len(q) > 0 and nums[i] > nums[q[0]]:
+                q.popleft()
+            q.appendleft(i)
             if i >= k - 1:
-                res.append(nums[q[0]])
+                res.append(nums[q[-1]])
         return res
