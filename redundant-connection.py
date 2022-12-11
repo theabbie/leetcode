@@ -1,22 +1,19 @@
+from collections import defaultdict
+
 class Solution:
-    def DFS(self, node, graph, visited, src, dest):
-        visited.add(node)
-        for i in graph.get(node, []):
-            if i not in visited:
-                if (node, i) != (src, dest) and (i, node) != (dest, src):
-                    self.DFS(i, graph, visited, src, dest)
+    def DFS(self, graph, i, v, a, b):
+        for j in graph[i]:
+            if j not in v and (i, j) != (a, b) and (i, j) != (b, a):
+                v.add(j)
+                self.DFS(graph, j, v, a, b)
     
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
-        n = len(edges)
-        graph = {}
-        numnodes = 0
+        graph = defaultdict(set)
         for a, b in edges:
-            numnodes = max(numnodes, a, b)
-            graph[a] = graph.get(a, set()).union({b})
-            graph[b] = graph.get(b, set()).union({a})
-        for k in range(n - 1, -1, -1):
-            a, b = edges[k]
-            visited = set()
-            self.DFS(a, graph, visited, a, b)
-            if len(visited) == numnodes:
-                return edges[k]
+            graph[a].add(b)
+            graph[b].add(a)
+        for a, b in edges[::-1]:
+            v = {a}
+            self.DFS(graph, a, v, a, b)
+            if len(v) == len(graph):
+                return [a, b]

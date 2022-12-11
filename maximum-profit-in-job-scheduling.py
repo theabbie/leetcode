@@ -4,7 +4,6 @@ class Solution:
     def jobScheduling(self, startTime: List[int], endTime: List[int], profit: List[int]) -> int:
         n = len(startTime)
         times = []
-        starts = []
         for i in range(n):
             times.append((startTime[i], endTime[i], profit[i]))
         times.sort()
