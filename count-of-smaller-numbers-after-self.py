@@ -1,11 +1,11 @@
-import bisect
+from sortedcontainers import SortedList
 
 class Solution:
     def countSmaller(self, nums: List[int]) -> List[int]:
         n = len(nums)
-        smallers = []
+        bst = SortedList()
+        res = [0] * n
         for i in range(n - 1, -1, -1):
-            currctr = bisect.bisect_left(smallers, nums[i])
-            bisect.insort(smallers, nums[i])
-            nums[i] = currctr
-        return nums
+            res[i] = bst.bisect_left(nums[i])
+            bst.add(nums[i])
+        return res

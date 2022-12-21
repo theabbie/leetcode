@@ -1,0 +1,1 @@
+{"name":"Local: longest_subarray","url":"/home/theabbie/Desktop/leetcode/miscellaneous/longest_subarray.py","tests":[{"id":1671029844781,"input":"3\n3\n1 2 4\n3\n1 3 2\n4\n2 3 4 7","output":"-1\n1\n3"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/theabbie/Desktop/leetcode/miscellaneous/longest_subarray.py","group":"local","local":true}
