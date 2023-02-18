@@ -1,1 +1,0 @@
-{"name":"Local: palindrome_in_making","url":"/home/theabbie/Desktop/leetcode/miscellaneous/palindrome_in_making.py","tests":[{"id":1669219818678,"input":"3\n6\n2 6 4 3 4 1\n2\n1 10\n3\n1 10 1","output":"2\n9\n0"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/theabbie/Desktop/leetcode/miscellaneous/palindrome_in_making.py","group":"local","local":true}

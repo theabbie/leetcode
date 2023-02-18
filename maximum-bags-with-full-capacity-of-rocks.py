@@ -3,7 +3,6 @@ class Solution:
         n = len(capacity)
         diff = [capacity[i] - rocks[i] for i in range(n)]
         diff.sort()
-        print(diff)
         i = 0
         while additionalRocks > 0 and i < n:
             additionalRocks -= diff[i]

@@ -1,22 +1,15 @@
+from collections import Counter
+
 class Solution:
     def checkInclusion(self, p: str, s: str) -> bool:
         np = len(p)
         ns = len(s)
-        if np > ns:
-            return False
-        pctr = [0] * 26
-        for c in p:
-            pctr[ord(c) - ord('a')] += 1
-        sctr = [0] * 26
-        for i in range(np):
-            sctr[ord(s[i]) - ord('a')] += 1
-        i = 0
-        while i < ns - np:
-            if pctr == sctr:
+        ctrp = Counter(p)
+        ctrs = Counter()
+        for i in range(ns):
+            ctrs[s[i]] += 1
+            if i >= np:
+                ctrs[s[i - np]] -= 1
+            if i >= np - 1 and ctrp == ctrs:
                 return True
-            sctr[ord(s[i]) - ord('a')] -= 1
-            sctr[ord(s[i + np]) - ord('a')] += 1
-            i += 1
-        if pctr == sctr:
-            return True
         return False

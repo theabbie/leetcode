@@ -1,14 +1,28 @@
 class Solution:
+    def factors(self, n):
+        N = n
+        i = 2
+        factors = set()
+        while i * i <= n:
+            if n % i:
+                i += 1
+                continue
+            while n % i == 0:
+                n //= i
+            factors.add(i)
+        if n > 1:
+            factors.add(n)
+        return factors
+    
     def repeatedSubstringPattern(self, s: str) -> bool:
         n = len(s)
-        for l in range(1, 1 + (n // 2)):
-            valid = True
-            prev = None
-            for i in range(0, n, l):
-                if prev and prev != s[i:i+l]:
-                    valid = False
+        for p in self.factors(n):
+            l = n // p
+            found = True
+            for i in range(n):
+                if s[i] != s[i % l]:
+                    found = False
                     break
-                prev = s[i:i+l]
-            if valid:
+            if found:
                 return True
         return False

@@ -1,1 +1,0 @@
-{"name":"Local: knights","url":"/home/theabbie/Desktop/leetcode/miscellaneous/knights.py","tests":[{"id":1664462314246,"input":"3\n1 7\n8 8\n3 3","output":"1 7\n7 2\n2 2"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/theabbie/Desktop/leetcode/miscellaneous/knights.py","group":"local","local":true}

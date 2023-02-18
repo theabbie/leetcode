@@ -1,1 +1,0 @@
-{"name":"Local: distribute","url":"/home/theabbie/Desktop/leetcode/miscellaneous/distribute.py","tests":[{"id":1664462978477,"input":"5\n2\n4\n6\n8\n60","output":"1 0 1\n3 2 1\n12 7 1\n42 27 1\n341102826 248150916 1"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/theabbie/Desktop/leetcode/miscellaneous/distribute.py","group":"local","local":true}

@@ -1,1 +1,0 @@
-{"name":"Local: sort_binary","url":"/home/theabbie/Desktop/leetcode/miscellaneous/sort_binary.py","tests":[{"id":1669220983592,"input":"2\n4\n0011\n6\n111000","output":"10\n17"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/theabbie/Desktop/leetcode/miscellaneous/sort_binary.py","group":"local","local":true}

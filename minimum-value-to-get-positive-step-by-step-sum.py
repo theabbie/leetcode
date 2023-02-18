@@ -1,8 +1,9 @@
 class Solution:
     def minStartValue(self, nums: List[int]) -> int:
-        curr = 0
-        minval = float('inf')
+        p = 0
+        res = 1
         for el in nums:
-            curr += el
-            minval = min(minval, curr)
-        return max(1 - minval, 1)
+            p += el
+            if p <= 0:
+                res = max(res, -p + 1)
+        return res

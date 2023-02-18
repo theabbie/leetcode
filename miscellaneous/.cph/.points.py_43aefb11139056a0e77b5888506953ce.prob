@@ -1,1 +1,0 @@
-{"name":"Local: points","url":"/home/theabbie/Desktop/leetcode/miscellaneous/points.py","tests":[{"id":1666442648907,"input":"3 -1 1\n2 1 3","output":"Yes"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/theabbie/Desktop/leetcode/miscellaneous/points.py","group":"local","local":true}

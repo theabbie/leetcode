@@ -1,39 +1,54 @@
+class Node:
+    def __init__(self, val=None):
+        self.left = None
+        self.right = None
+        self.val = val
+        self.end = False
+
 class MyHashMap:
 
     def __init__(self):
-        self.size = 107
-        self.arr = [[] for i in range(self.size)]
-        
-    def hfn(self, key):
-        key = ((key >> 16) ^ key) * 0x45d9f3b
-        key = ((key >> 16) ^ key) * 0x45d9f3b
-        key = (key >> 16) ^ key
-        return key % self.size
+        self.root = Node()
 
     def put(self, key: int, value: int) -> None:
-        self.remove(key)
-        self.arr[self.hfn(key)].append((key, value))
+        curr = self.root
+        while key:
+            if key & 1:
+                if curr.right == None:
+                    curr.right = Node()
+                curr = curr.right
+            else:
+                if curr.left == None:
+                    curr.left = Node()
+                curr = curr.left
+            key = key >> 1
+        curr.val = value
+        curr.end = True
 
     def get(self, key: int) -> int:
-        curr = self.arr[self.hfn(key)]
-        val = -1
-        for k, v in curr:
-            if k == key:
-                val = v
-                break
-        return val
+        curr = self.root
+        while key:
+            if curr == None:
+                return -1
+            if key & 1:
+                curr = curr.right
+            else:
+                curr = curr.left
+            key = key >> 1
+        if not curr or not curr.end:
+            return -1
+        return curr.val
 
     def remove(self, key: int) -> None:
-        k = len(self.arr[self.hfn(key)])
-        for i in range(k):
-            if self.arr[self.hfn(key)][i][0] == key:
-                self.arr[self.hfn(key)][i] = self.arr[self.hfn(key)][-1]
-                self.arr[self.hfn(key)].pop()
-                break
-
-
-# Your MyHashMap object will be instantiated and called as such:
-# obj = MyHashMap()
-# obj.put(key,value)
-# param_2 = obj.get(key)
-# obj.remove(key)
+        curr = self.root
+        while key:
+            if curr == None:
+                return None
+            if key & 1:
+                curr = curr.right
+            else:
+                curr = curr.left
+            key = key >> 1
+        if not curr or not curr.end:
+            return
+        curr.end = False

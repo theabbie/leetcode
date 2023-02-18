@@ -1,17 +1,27 @@
 class Solution:
-    def getprefix(self, s, n):
-        z = [0] * n
-        d = 0
-        for i in range(1, n):
-            while d and s[d] != s[i]:
-                d = z[d - 1]
-            d += s[i] == s[d]
-            z[i] = d
-        return z
+    def hashes(self, s, n, p, M):
+        h = [0] * (n + 1)
+        pi = 1
+        for i in range(n):
+            h[i + 1] = (h[i] + pi * (ord(s[i]) - ord('a'))) % M
+            pi = (pi * p) % M
+        return h
     
     def shortestPalindrome(self, s: str) -> str:
         n = len(s)
-        z = self.getprefix(s + "#" + s[::-1], 2 * n + 1)
-        if z[-1] == n:
-            return s
-        return s[z[-1]-n:][::-1] + s
+        p = 31
+        M = 10 ** 9 + 9
+        pw = [1]
+        for _ in range(n - 1):
+            pw.append((pw[-1] * p) % M)
+        fhashes = self.hashes(s, n, p, M)
+        rhashes = self.hashes(s[::-1], n, p, M)
+        subhash = lambda h, i, j: (h[j + 1] + M - h[i]) % M
+        l = 0
+        for i in range(n):
+            fhash = subhash(fhashes, 0, i)
+            rhash = subhash(rhashes, n - i - 1, n - 1)
+            fhash = (fhash * pw[n - i - 1]) % M
+            if fhash == rhash:
+                l = i + 1
+        return s[l:][::-1] + s
