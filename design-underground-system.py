@@ -18,10 +18,3 @@ class UndergroundSystem:
     def getAverageTime(self, startStation: str, endStation: str) -> float:
         k = (startStation, endStation)
         return self.paths[k] / self.pathctr[k]
-
-
-# Your UndergroundSystem object will be instantiated and called as such:
-# obj = UndergroundSystem()
-# obj.checkIn(id,stationName,t)
-# obj.checkOut(id,stationName,t)
-# param_3 = obj.getAverageTime(startStation,endStation)

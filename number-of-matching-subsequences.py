@@ -1,26 +1,33 @@
 class Solution:
-    def isSubsequence(self, s: str, t: str) -> bool:
-        i = 0
-        j = 0
-        while i < len(s) and j < len(t):
-            if s[i] == t[j]:
-                i += 1
-                j += 1
-            else:
-                j += 1
-        return i == len(s)
-    
     def numMatchingSubseq(self, s: str, words: List[str]) -> int:
-        ctr = 0
-        done = {}
+        n = len(s)
+        pos = {}
+        for i in range(n):
+            if s[i] not in pos:
+                pos[s[i]] = []
+            pos[s[i]].append(i)
+        res = 0
         for w in words:
-            if w in done:
-                if done[w]:
-                    ctr += 1
-                continue
-            if len(w) <= len(s) and self.isSubsequence(w, s):
-                done[w] = True
-                ctr += 1
-            else:
-                done[w] = False
-        return ctr
+            prev = -1
+            sub = True
+            for c in w:
+                if c not in pos:
+                    sub = False
+                    break
+                beg = 0
+                end = len(pos[c]) - 1
+                curr = -1
+                while beg <= end:
+                    mid = (beg + end) // 2
+                    if pos[c][mid] > prev:
+                        curr = pos[c][mid]
+                        end = mid - 1
+                    else:
+                        beg = mid + 1
+                if curr == -1:
+                    sub = False
+                    break
+                prev = curr
+            if sub:
+                res += 1
+        return res

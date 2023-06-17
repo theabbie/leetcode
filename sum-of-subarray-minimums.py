@@ -1,6 +1,7 @@
 class Solution:
     def sumSubarrayMins(self, arr: List[int]) -> int:
         n = len(arr)
+        M = 10 ** 9 + 7
         stack = []
         next_smaller = [n] * n
         prev_smaller = [-1] * n
@@ -16,4 +17,5 @@ class Solution:
             l = prev_smaller[i]
             r = next_smaller[i]
             res += (i - l) * (r - i) * arr[i]
-        return res % (10 ** 9 + 7)
+            res %= M
+        return res

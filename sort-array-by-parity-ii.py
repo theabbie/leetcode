@@ -3,7 +3,7 @@ class Solution:
         n = len(nums)
         odds = []
         evens = []
-        for i in range(n - 1, -1, -1):
+        for i in range(n):
             if nums[i] & 1:
                 odds.append(nums[i])
             else:

@@ -1,20 +1,29 @@
 class Solution:
-    def getList(self, head, rem, i):
-        if not head:
-            return head
-        if i % 2 != rem:
-            return self.getList(head.next, rem, i + 1)
-        newhead = TreeNode(val = head.val)
-        newhead.next = self.getList(head.next, rem, i + 1)
-        return newhead
-    
     def oddEvenList(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        left = self.getList(head, 1, 1)
-        right = self.getList(head, 0, 1)
-        if not left:
-            return right
-        curr = left
-        while curr and curr.next:
-            curr = curr.next
-        curr.next = right
-        return left
+        evenprev = None
+        oddprev = None
+        evenhead = None
+        oddhead = None
+        curr = head
+        odd = False
+        while curr:
+            nextcurr = curr.next
+            if odd:
+                if oddprev != None:
+                    oddprev.next = curr
+                else:
+                    oddhead = curr
+                oddprev = curr
+                oddprev.next = None
+            else:
+                if evenprev != None:
+                    evenprev.next = curr
+                else:
+                    evenhead = curr
+                evenprev = curr
+                evenprev.next = None
+            curr = nextcurr
+            odd = not odd
+        if evenprev:
+            evenprev.next = oddhead
+        return evenhead

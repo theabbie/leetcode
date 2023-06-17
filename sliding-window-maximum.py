@@ -1,57 +1,67 @@
-from collections import deque
+class TrieNode:
+    def __init__(self):
+        self.child = {}
+        self.end = False
+        self.ctr = 0
 
-class Stack:
-    def __init__(self, init, func):
-        self.stack = deque([(init, init)])
-        self.func = func
-        
-    def push(self, val):
-        top, topfunc = self.stack[-1]
-        self.stack.append((val, self.func(topfunc, val)))
-        
-    def empty(self):
-        return len(self.stack) <= 1
-        
-    def pop(self):
-        if not self.empty():
-            top, topfunc = self.stack.pop()
-            return top
-            
-    def funcval(self):
-        top, topfunc = self.stack[-1]
-        return topfunc
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
 
-class Queue:
-    def __init__(self, init = float('inf'), func = min):
-        self.func = func
-        self.f = Stack(init, func)
-        self.s = Stack(init, func)
+    def insert(self, s):
+        curr = self.root
+        curr.ctr += 1
+        for c in s:
+            if c not in curr.child:
+                curr.child[c] = TrieNode()
+            curr = curr.child[c]
+            curr.ctr += 1
+        curr.end = True
         
-    def push(self, val):
-        self.f.push(val)
-        
-    def empty(self):
-        return self.f.empty() and self.s.empty()
+    def delete(self, s):
+        curr = self.root
+        curr.ctr -= 1
+        for c in s:
+            curr = curr.child[c]
+            curr.ctr -= 1
+        curr.end = True
+
+    def check(self, s):
+        curr = self.root
+        for c in s:
+            if c not in curr.child or curr.child[c].ctr == 0:
+                return False
+            curr = curr.child[c]
+        return curr.end
     
-    def pop(self):
-        if self.s.empty():
-            while not self.f.empty():
-                self.s.push(self.f.pop())
-        if not self.s.empty():
-            return self.s.pop()
-                    
-    def funcval(self):
-        return self.func(self.f.funcval(), self.s.funcval())
+    def kthsmallest(self, k):
+        curr = self.root
+        res = 0
+        while True:
+            done = True
+            for c in sorted(curr.child):
+                if k > curr.child[c].ctr:
+                    k -= curr.child[c].ctr
+                else:
+                    res = 10 * res + int(c)
+                    curr = curr.child[c]
+                    done = False
+                    break
+            if done:
+                break
+        return res
 
 class Solution:
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
         n = len(nums)
         res = []
-        q = Queue(init = float('-inf'), func = max)
+        M = min(nums)
+        M = -M if M < 0 else 0
+        trie = Trie()
         for i in range(n):
-            q.push(nums[i])
+            trie.insert("{:010}".format(M + nums[i]))
             if i >= k:
-                q.pop()
+                trie.delete("{:010}".format(M + nums[i - k]))
             if i >= k - 1:
-                res.append(q.funcval())
+                res.append(trie.kthsmallest(k) - M)
         return res

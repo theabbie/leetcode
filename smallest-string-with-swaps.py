@@ -1,27 +1,39 @@
 from collections import defaultdict
 
+class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.size = [1] * n
+        
+    def find(self, a):
+        if a == self.parent[a]:
+            return a
+        self.parent[a] = self.find(self.parent[a])
+        return self.parent[a]
+        
+    def union(self, a, b):
+        parent_a = self.find(a)
+        parent_b = self.find(b)
+        if parent_a != parent_b:
+            if self.size[parent_a] < self.size[parent_b]:
+                parent_a, parent_b = parent_b, parent_a
+            self.parent[parent_b] = parent_a
+            self.size[parent_a] += self.size[parent_b]
+
 class Solution:
-    def dfs(self, graph, node, visited):
-        for j in graph[node]:
-            if j not in visited:
-                visited.add(j)
-                self.dfs(graph, j, visited)
-    
     def smallestStringWithSwaps(self, s: str, pairs: List[List[int]]) -> str:
-        op = list(s)
-        graph = defaultdict(list)
+        s = list(s)
+        n = len(s)
+        dsu = DSU(n)
         for a, b in pairs:
-            graph[a].append(b)
-            graph[b].append(a)
-        globalvisited = set()
-        for x in graph:
-            if x not in globalvisited:
-                currvisited = {x}
-                self.dfs(graph, x, currvisited)
-                indexes = sorted(currvisited)
-                indexes_asc = sorted(currvisited, key = lambda p: s[p])
-                n = len(indexes)
-                for i in range(n):
-                    op[indexes[i]] = s[indexes_asc[i]]
-                globalvisited.update(currvisited)
-        return "".join(op)
+            dsu.union(a, b)
+        comps = defaultdict(list)
+        for i in range(n):
+            comps[dsu.find(i)].append(i)
+        for i in range(n):
+            chars = sorted([s[j] for j in comps[i]])
+            k = 0
+            for j in comps[i]:
+                s[j] = chars[k]
+                k += 1
+        return "".join(s)

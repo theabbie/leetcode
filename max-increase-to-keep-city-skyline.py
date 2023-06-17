@@ -1,14 +1,15 @@
 class Solution:
     def maxIncreaseKeepingSkyline(self, grid: List[List[int]]) -> int:
-        n = len(grid)
-        rowmaxes = [float('-inf')] * n
-        colmaxes = [float('-inf')] * n
-        for i in range(n):
+        m = len(grid)
+        n = len(grid[0])
+        rowmax = [0] * m
+        colmax = [0] * n
+        for i in range(m):
             for j in range(n):
-                rowmaxes[i] = max(rowmaxes[i], grid[i][j])
-                colmaxes[j] = max(colmaxes[j], grid[i][j])
+                rowmax[i] = max(rowmax[i], grid[i][j])
+                colmax[j] = max(colmax[j], grid[i][j])
         res = 0
-        for i in range(n):
+        for i in range(m):
             for j in range(n):
-                res += min(rowmaxes[i], colmaxes[j]) - grid[i][j]
+                res += min(rowmax[i], colmax[j]) - grid[i][j]
         return res

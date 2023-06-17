@@ -7,10 +7,8 @@ class Solution:
             mid = (beg + end) // 2
             if nums[mid] == target:
                 return mid
-            elif beg == end:
-                break
-            elif nums[mid] > target:
-                end = mid
-            else:
+            if nums[mid] <= target:
                 beg = mid + 1
+            else:
+                end = mid - 1
         return -1

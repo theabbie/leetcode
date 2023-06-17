@@ -1,15 +1,23 @@
 class Solution:
-    def countUnique(self, n, used, first):
-        if n == 0:
-            return 0
-        ctr = 0
-        beg = 0
-        if first:
-            beg = 1
-        for i in range(beg, 10):
-            if i not in used:
-                ctr += 1 + self.countUnique(n - 1, used.union({i}), False)
-        return ctr
+    def count(self, num, i, n, tight, nzseen, mask):
+        if i >= n:
+            return 1
+        key = (i, tight, nzseen, mask)
+        if key in self.cache:
+            return self.cache[key]
+        maxd = 9
+        if tight:
+            maxd = int(num[i])
+        res = 0
+        for d in range(maxd + 1):
+            if not mask & (1 << d) or (d == 0 and not nzseen):
+                newmask = mask
+                if d != 0 or (nzseen and d == 0):
+                    newmask = mask | (1 << d)
+                res += self.count(num, i + 1, n, tight and d == maxd, nzseen or d != 0, newmask)
+        self.cache[key] = res
+        return res
     
     def countNumbersWithUniqueDigits(self, n: int) -> int:
-        return self.countUnique(n, set(), True) + 1
+        self.cache = {}
+        return self.count(str(10 ** n - 1), 0, n, True, False, 0)

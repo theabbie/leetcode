@@ -1,23 +1,18 @@
-from collections import Counter;
-import heapq
+from collections import Counter
 
 class Solution:
     def mostCommonWord(self, paragraph: str, banned: List[str]) -> str:
         banned = set(banned)
-        words = []
-        paragraph += " ";
-        chunk = "";
+        w = []
+        ctr = Counter()
+        paragraph += " "
         for c in paragraph:
-            if not c.isalpha():
-                if len(chunk) > 0:
-                    words.append(chunk)
-                    chunk = ""
-            else:
-                chunk += c.lower()
-        ctr = Counter(words)
-        heap = [(-v, k) for k, v in ctr.items()]
-        heapq.heapify(heap)
-        freq = heapq.heappop(heap)[1]
-        while freq in banned:
-            freq = heapq.heappop(heap)[1]
-        return freq
+            if c in " !?',;.":
+                if len(w) > 0:
+                    ctr["".join(w)] += 1
+                    w = []
+            elif c.isalpha():
+                w.append(c.lower())
+        for w in sorted(ctr, key = lambda word: -ctr[word]):
+            if w not in banned:
+                return w

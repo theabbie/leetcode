@@ -8,8 +8,10 @@ class Solution:
         for i in range(high + 1):
             if i >= zero:
                 dp[i] += dp[i - zero]
+                dp[i] %= M
             if i >= one:
                 dp[i] += dp[i - one]
+                dp[i] %= M
             if low <= i <= high:
                 res = (res + dp[i]) % M
         return res

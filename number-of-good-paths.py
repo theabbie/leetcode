@@ -1,34 +1,44 @@
-from collections import defaultdict, Counter
+from collections import Counter, defaultdict
+
+class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.size = [1] * n
+        
+    def find(self, a):
+        if a == self.parent[a]:
+            return a
+        self.parent[a] = self.find(self.parent[a])
+        return self.parent[a]
+        
+    def union(self, a, b):
+        parent_a = self.find(a)
+        parent_b = self.find(b)
+        if parent_a != parent_b:
+            if self.size[parent_a] < self.size[parent_b]:
+                parent_a, parent_b = parent_b, parent_a
+            self.parent[parent_b] = parent_a
+            self.size[parent_a] += self.size[parent_b]
 
 class Solution:
-    def find(self, x):
-        if self.parent[x] == x:
-            return x
-        self.parent[x] = self.find(self.parent[x])
-        return self.parent[x]
-    
-    def union(self, x, y):
-        px = self.find(x)
-        py = self.find(y)
-        if px != py:
-            self.parent[py] = px
-    
     def numberOfGoodPaths(self, vals: List[int], edges: List[List[int]]) -> int:
         n = len(vals)
-        nodemap = defaultdict(set)
-        edgemap = defaultdict(set)
+        m = len(edges)
+        dsu = DSU(n)
+        for e in edges:
+            e.append(max(vals[e[0]], vals[e[1]]))
+        nodes = defaultdict(set)
         for i in range(n):
-            nodemap[vals[i]].add(i)
-        for a, b in edges:
-            edgemap[max(vals[a], vals[b])].add((min(a, b), max(a, b)))
-        self.parent = list(range(n))
+            nodes[vals[i]].add(i)
+        edges.sort(key = lambda e: e[2])
         res = n
-        for nodeval in sorted(edgemap.keys()):
-            for a, b in edgemap[nodeval]:
-                self.union(a, b)
+        i = 0
+        for nodeval in sorted(set(vals)):
+            while i < m and edges[i][2] <= nodeval:
+                dsu.union(edges[i][0], edges[i][1])
+                i += 1
             ctr = Counter()
-            for i in nodemap[nodeval]:
-                ctr[self.find(i)] += 1
-            for x in ctr.values():
-                res += x * (x - 1) // 2
+            for x in nodes[nodeval]:
+                res += ctr[dsu.find(x)]
+                ctr[dsu.find(x)] += 1
         return res

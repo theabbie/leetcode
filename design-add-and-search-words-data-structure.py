@@ -37,8 +37,3 @@ class WordDictionary:
                     if word[i] == "." or c.val == word[i]:
                         paths.append((c, i + 1))
         return False
-
-# Your WordDictionary object will be instantiated and called as such:
-# obj = WordDictionary()
-# obj.addWord(word)
-# param_2 = obj.search(word)

@@ -1,41 +1,29 @@
 class Solution:
-    def getNeighbors(self, start, m, n):
-        a, b = start
-        neighbors = []
-        if a > 0:
-            neighbors.append((a - 1, b))
-        if a < m - 1:
-            neighbors.append((a + 1, b))
-        if b > 0:
-            neighbors.append((a, b - 1))
-        if b < n - 1:
-            neighbors.append((a, b + 1))
-        return neighbors
-    
-    def unipaths(self, start, grid, visited, m, n, numEmpty):
-        currval = grid[start[0]][start[1]]
-        ways = 0
-        if currval == -1:
-            return ways
-        if currval == 2:
-            if len(visited) == numEmpty + 2:
-                return ways + 1
-            return ways
-        neighbors = self.getNeighbors(start, m, n)
-        for neighbor in neighbors:
-            if grid[neighbor[0]][neighbor[1]] != -1 and neighbor not in visited:
-                ways += self.unipaths(neighbor, grid, visited.union({neighbor}), m, n, numEmpty)
-        return ways
+    def count(self, grid, i, j, m, n, mask, target):
+        if grid[i][j] == 2:
+            if mask == target:
+                return 1
+            return 0
+        key = (i, j, mask)
+        if key in self.cache:
+            return self.cache[key]
+        res = 0
+        for x, y in [(i - 1, j), (i, j - 1), (i + 1, j), (i, j + 1)]:
+            if 0 <= x < m and 0 <= y < n and grid[x][y] != -1 and not mask & (1 << (n * x + y)):
+                res += self.count(grid, x, y, m, n, mask | (1 << (n * x + y)), target)
+        self.cache[key] = res
+        return res
     
     def uniquePathsIII(self, grid: List[List[int]]) -> int:
         m = len(grid)
         n = len(grid[0])
-        numEmpty = 0
-        start = None
+        self.cache = {}
+        start = (-1, -1)
+        target = 0
         for i in range(m):
             for j in range(n):
-                if grid[i][j] == 0:
-                    numEmpty += 1
-                elif grid[i][j] == 1:
+                if grid[i][j] == 1:
                     start = (i, j)
-        return self.unipaths(start, grid, {start}, m, n, numEmpty)
+                if grid[i][j] != -1:
+                    target |= 1 << (n * i + j)
+        return self.count(grid, start[0], start[1], m, n, 1 << (n * start[0] + start[1]), target)
