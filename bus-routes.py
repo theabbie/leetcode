@@ -15,11 +15,10 @@ class Solution:
         for el in pos:
             m = len(pos[el])
             for i in range(m):
-                for j in range(i + 1, m):
-                    a = pos[el][i]
-                    b = pos[el][j]
-                    graph[(el, a)].add((el, b, 1))
-                    graph[(el, b)].add((el, a, 1))
+                a = pos[el][i]
+                b = pos[el][(i + 1) % m]
+                graph[(el, a)].add((el, b, 1))
+                graph[(el, b)].add((el, a, 1))
         q = deque()
         dist = defaultdict(lambda: float('inf'))
         res = float('inf')

@@ -1,15 +1,11 @@
-from collections import deque, defaultdict
+import numpy as np
 
 class Solution:
     def jump(self, nums: List[int]) -> int:
         n = len(nums)
-        dist = defaultdict(lambda: float('inf'))
-        dist[0] = 0
-        q = deque([0])
-        while len(q) > 0:
-            i = q.pop()
-            for j in range(i + 1, min(i + nums[i] + 1, n)):
-                if dist[j] > dist[i] + 1:
-                    dist[j] = dist[i] + 1
-                    q.appendleft(j)
-        return dist[n - 1]
+        dp = np.array([n] * n)
+        dp[n - 1] = 0
+        for i in range(n - 2, -1, -1):
+            if nums[i] != 0:
+                dp[i] = 1 + np.min(dp[i : i + nums[i] + 1])
+        return dp[0]

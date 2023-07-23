@@ -1,24 +1,30 @@
 class Solution:
-    def smallest(self, pattern, curr, i, n, used):
+    def find(self, pattern, i, n, res, prev, used):
         if i >= n:
-            self.res = min(self.res, curr)
-            return
-        a, b = 1, 10
-        if pattern[i] == "I":
-            a = curr % 10 + 1
+            return True
+        if i == 0:
+            for curr in range(1, 10):
+                res[i] = str(curr)
+                if self.find(pattern, i + 1, n, res, str(curr), used | (1 << curr)):
+                    return True
+                res[i] = ""
         else:
-            b = curr % 10
-        res = float('inf')
-        for d in range(a, b):
-            if d not in used:
-                used.add(d)
-                self.smallest(pattern, curr * 10 + d, i + 1, n, used)
-                used.remove(d)
-        return res
+            if pattern[i - 1] == "I":
+                for curr in range(int(prev) + 1, 10):
+                    res[i] = str(curr)
+                    if not used & (1 << curr) and self.find(pattern, i + 1, n, res, str(curr), used | (1 << curr)):
+                        return True
+                    res[i] = ""
+            if pattern[i - 1] == "D":
+                for curr in range(1, int(prev)):
+                    res[i] = str(curr)
+                    if not used & (1 << curr) and self.find(pattern, i + 1, n, res, str(curr), used | (1 << curr)):
+                        return True
+                    res[i] = ""
+        return False
     
     def smallestNumber(self, pattern: str) -> str:
         n = len(pattern)
-        self.res = float('inf')
-        for d in range(1, 10):
-            self.smallest(pattern, d, 0, n, {d})
-        return str(self.res)
+        res = [""] * (n + 1)
+        self.find(pattern, 0, n + 1, res, "", 0)
+        return "".join(res)
