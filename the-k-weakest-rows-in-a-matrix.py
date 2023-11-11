@@ -8,7 +8,7 @@ class Solution:
         for i, row in enumerate(mat):
             strength = -bisect.bisect_left(row, 1)
             heapq.heappush(heap, (strength, i))
-        op = []
+        res = []
         for i in range(k):
-            op.append(heapq.heappop(heap)[1])
-        return op
+            res.append(heapq.heappop(heap)[1])
+        return res

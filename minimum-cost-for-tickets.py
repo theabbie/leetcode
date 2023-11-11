@@ -1,20 +1,15 @@
-import bisect
-
 class Solution:
-    def mincost(self, days: List[int], costs: List[int], i) -> int:
+    def mincostTickets(self, days: List[int], costs: List[int]) -> int:
         n = len(days)
-        if i >= n:
-            return 0
-        if i in self.cache:
-            return self.cache[i]
-        today = days[i]
-        tomorrow = i + 1
-        nextweek = bisect.bisect_right(days, today + 6)
-        nextmonth = bisect.bisect_right(days, today + 29)
-        cost = min(costs[0] + self.mincost(days, costs, tomorrow), costs[1] + self.mincost(days, costs, nextweek), costs[2] + self.mincost(days, costs, nextmonth))
-        self.cache[i] = cost
-        return cost
-    
-    def mincostTickets(self, days: List[int], costs: List[int], i = 0) -> int:
-        self.cache = {}
-        return self.mincost(days, costs, 0)
+        dp = [float('inf')] * (n + 1)
+        dp[n] = 0
+        x = y = z = n - 1
+        for i in range(n - 1, -1, -1):
+            while x >= i and days[x] - days[i] >= 1:
+                x -= 1
+            while y >= i and days[y] - days[i] >= 7:
+                y -= 1
+            while z >= i and days[z] - days[i] >= 30:
+                z -= 1
+            dp[i] = min(costs[0] + dp[x + 1], costs[1] + dp[y + 1], costs[2] + dp[z + 1])
+        return dp[0]

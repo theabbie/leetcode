@@ -1,11 +1,13 @@
+from collections import defaultdict
+
 class Solution:
     def groupThePeople(self, groupSizes: List[int]) -> List[List[int]]:
-        numpeople = {}
+        numpeople = defaultdict(list)
         for i, gsize in enumerate(groupSizes):
-            numpeople[gsize] = numpeople.get(gsize, []) + [i]
-        op = []
+            numpeople[gsize].append(i)
+        res = []
         for size, people in numpeople.items():
             n = len(people)
             for i in range(0, n, size):
-                op.append(people[i:i+size])
-        return op
+                res.append(people[i:i+size])
+        return res

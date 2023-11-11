@@ -1,3 +1,5 @@
+M = 10 ** 9 + 7
+
 class Solution:
     def numFactoredBinaryTrees(self, arr: List[int]) -> int:
         arrset = set(arr)
@@ -16,7 +18,9 @@ class Solution:
                     if arr[i] * arr[i] != num:
                         k = 2
                     ctr += k * l * r
+                    ctr %= M
                 i += 1
             count[num] = ctr
             res += ctr
-        return res % (10 ** 9 + 7)
+            res %= M
+        return res

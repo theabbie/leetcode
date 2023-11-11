@@ -1,9 +1,14 @@
+from collections import Counter
+
 class Solution:
     def threeSumMulti(self, arr: List[int], target: int) -> int:
-        d = [0] * 300
+        M = 10 ** 9 + 7
+        n = len(arr)
         res = 0
-        for i, el in enumerate(arr):
-            res += d[target - el] if target - el >= 0 else 0
-            for j in range(i):
-                d[el + arr[j]] += 1
-        return res % (10 ** 9 + 7)
+        ctr = Counter()
+        for i in range(n):
+            for j in range(i + 1, n):
+                res += ctr[target - arr[i] - arr[j]]
+                res %= M
+            ctr[arr[i]] += 1
+        return res

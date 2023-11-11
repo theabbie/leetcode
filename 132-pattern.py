@@ -1,18 +1,14 @@
-from sortedcontainers import SortedList
-
 class Solution:
     def find132pattern(self, nums: List[int]) -> bool:
         n = len(nums)
-        smallest = [float('inf')]
+        stack = []
+        minsofar = nums[:]
+        for i in range(1, n):
+            minsofar[i] = min(minsofar[i], minsofar[i - 1])
         for i in range(n):
-            smallest.append(min(smallest[-1], nums[i]))
-        order = SortedList()
-        for i in range(n - 1, -1, -1):
-            j = order.bisect_left(nums[i])
-            if len(order) > 0 and j <= len(order):
-                if j > 0:
-                    j -= 1
-                if nums[i] > smallest[i] and nums[i] > order[j] and order[j] > smallest[i]:
-                    return True
-            order.add(nums[i])
+            while len(stack) > 0 and nums[i] >= nums[stack[-1]]:
+                stack.pop()
+            if len(stack) > 0 and stack[-1] > 0 and minsofar[stack[-1] - 1] < nums[i]:
+                return True
+            stack.append(i)
         return False

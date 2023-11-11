@@ -1,19 +1,18 @@
-import math
+import bisect
+
+MAX = 5 * 10 ** 6
+primes = [True] * MAX
+primes[0] = primes[1] = False
+i = 0
+while i * i <= MAX:
+    if primes[i]:
+        mul = i
+        while i * mul < MAX:
+            primes[i * mul] = False
+            mul += 1
+    i += 1
+plist = [i for i in range(MAX) if primes[i]]
 
 class Solution:
     def countPrimes(self, n: int) -> int:
-        if n <= 2:
-            return 0
-        primes = [1] * n
-        primes[0] = 0
-        primes[1] = 0
-        numprimes = n - 2
-        l = int(math.sqrt(n)) + 1
-        for i in range(2, l):
-            if primes[i] == 0:
-                continue
-            for j in range(i, 1 +  n // i):
-                if i * j < n and primes[i * j] == 1:
-                    primes[i * j] = 0
-                    numprimes -= 1
-        return numprimes
+        return bisect.bisect_left(plist, n)
