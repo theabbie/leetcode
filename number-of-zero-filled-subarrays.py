@@ -1,14 +1,13 @@
 class Solution:
     def zeroFilledSubarray(self, nums: List[int]) -> int:
-        n = len(nums)
-        i = 0
         res = 0
-        while i < n:
+        i = 0
+        while i < len(nums):
             ctr = 1
-            while i < n - 1 and nums[i] == nums[i + 1]:
+            while i < len(nums) - 1 and nums[i] == nums[i + 1]:
                 ctr += 1
                 i += 1
-            i += 1
-            if nums[i - 1] == 0:
+            if nums[i] == 0:
                 res += ctr * (ctr + 1) // 2
+            i += 1
         return res

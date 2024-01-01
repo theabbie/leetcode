@@ -1,19 +1,18 @@
+import bisect
+
 class Solution:
-    def lcs(self, text1: str, text2: str, i, j) -> int:
-        if (i, j) in self.cache:
-            return self.cache[(i, j)]
-        if i >= len(text1) or j >= len(text2):
-            self.cache[(i, j)] = 0
-            return 0
-        if text1[i] == text2[j]:
-            self.cache[(i, j)] = 1 + self.lcs(text1, text2, i + 1, j + 1)
-            return self.cache[(i, j)]
-        else:
-            a = self.lcs(text1, text2, i + 1, j)
-            b = self.lcs(text1, text2, i, j + 1)
-            self.cache[(i, j)] = max(a, b)
-            return self.cache[(i, j)]
-        
-    def longestCommonSubsequence(self, text1: str, text2: str, i = 0, j = 0) -> int:
-        self.cache = {}
-        return self.lcs(text1, text2, 0, 0)
+    def longestCommonSubsequence(self, a, b) -> int:
+        m = len(a)
+        n = len(b)
+        order = []
+        pos = [[] for _ in range(26)]
+        for i in range(n - 1, -1, -1):
+            pos[ord(b[i]) - ord('a')].append(i)
+        for i in range(m):
+            for j in pos[ord(a[i]) - ord('a')]:
+                x = bisect.bisect_left(order, j)
+                if x < len(order):
+                    order[x] = j
+                else:
+                    order.append(j)
+        return len(order)

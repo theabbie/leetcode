@@ -1,9 +1,15 @@
+from collections import deque, defaultdict
+
 class Solution:
     def countVisitedNodes(self, edges: List[int]) -> List[int]:
         n = len(edges)
         res = [0] * n
         v = set()
-        cycles = {}
+        q = deque()
+        vs = set()
+        graph = defaultdict(set)
+        for i in range(n):
+            graph[edges[i]].add(i)
         for node in range(n):
             i = 0
             pos = {}
@@ -17,20 +23,13 @@ class Solution:
             if node != -1 and node in pos:
                 for j in range(1, i - pos[node] + 1):
                     res[curr[-j]] = i - pos[node]
-        LOG = 1 + len("{:0b}".format(n + 1))
-        parent = [[edges[i]] * LOG for i in range(n)]
-        for d in range(1, LOG):
-            for i in range(n):
-                parent[i][d] = parent[parent[i][d - 1]][d - 1]
-        for i in range(n):
-            if res[i] != 0:
-                continue
-            curr = i
-            visited = 1
-            for k in range(LOG - 1, -1, -1):
-                if res[parent[curr][k]] == 0:
-                    curr = parent[curr][k]
-                    visited += 1 << k
-            visited += res[edges[curr]]
-            res[i] = visited
+                    q.appendleft((curr[-j], i - pos[node]))
+                    vs.add(curr[-j])
+        while len(q) > 0:
+            curr, d = q.pop()
+            res[curr] = d
+            for j in graph[curr]:
+                if j not in vs:
+                    vs.add(j)
+                    q.appendleft((j, d + 1))
         return res

@@ -1,16 +1,17 @@
 class Solution:
     def subarrayBitwiseORs(self, arr: List[int]) -> int:
         n = len(arr)
-        p = [0] * (n + 1)
+        lastone = [-1] * 32
         res = set()
         for i in range(n):
-            p[i + 1] |= p[i] | arr[i]
-        for j in range(n - 1, -1, -1):
-            res.add(p[j + 1])
-            curr = 0
-            i = j
-            while i >= 0 and curr | p[i + 1] != curr:
-                curr |= arr[i]
+            for b in range(32):
+                if arr[i] & (1 << b):
+                    lastone[b] = i
+            curr = arr[i]
+            res.add(curr)
+            for j in sorted(lastone, reverse = True):
+                if j == -1:
+                    break
+                curr |= arr[j]
                 res.add(curr)
-                i -= 1
         return len(res)

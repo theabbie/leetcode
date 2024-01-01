@@ -14,7 +14,6 @@ class Solution:
                 curr, d = q.pop()
                 if curr == b:
                     res = min(res, d + 1)
-                    break
                 for j in graph[curr]:
                     if j not in v and (curr, j) not in {(a, b), (b, a)}:
                         v.add(j)

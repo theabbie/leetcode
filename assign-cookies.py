@@ -4,11 +4,11 @@ class Solution:
         s.sort()
         n = len(s)
         ctr = 0
+        i = 0
         for greed in g:
-            for i in range(n):
-                if s[i] != None:
-                    if s[i] >= greed:
-                        s[i] = None
-                        ctr += 1
-                        break
+            while i < n and s[i] < greed:
+                i += 1
+            if i < n:
+                i += 1
+                ctr += 1
         return ctr

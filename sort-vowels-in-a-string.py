@@ -1,13 +1,18 @@
 class Solution:
     def sortVowels(self, s: str) -> str:
         n = len(s)
-        s = list(s)
-        vals = []
+        res = []
+        v = []
+        c = []
+        for i in range(n - 1, -1, -1):
+            if s[i] in "aeiouAEIOU":
+                v.append(s[i])
+            else:
+                c.append(s[i])
+        v.sort(reverse = True)
         for i in range(n):
-            if s[i].lower() in "aeiou":
-                vals.append(s[i])
-        vals.sort(reverse = True)
-        for i in range(n):
-            if s[i].lower() in "aeiou":
-                s[i] = vals.pop()
-        return "".join(s)
+            if s[i] in "aeiouAEIOU":
+                res.append(v.pop())
+            else:
+                res.append(c.pop())
+        return "".join(res)

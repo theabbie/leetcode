@@ -1,3 +1,5 @@
+M = 10 ** 9 + 7
+
 class Solution:
     def numberOfWays(self, corridor: str) -> int:
         if corridor.count("S") % 2 != 0:
@@ -16,9 +18,10 @@ class Solution:
             return 0
         if len(pos) == 2:
             return 1
-        p = 1
+        res = 1
         n = len(pos)
         for i in range(1, n, 2):
             if i < n and i + 1 < n:
-                p *= (pos[i + 1] - pos[i])
-        return p % ((10 ** 9) + 7)
+                res *= pos[i + 1] - pos[i]
+                res %= M
+        return res

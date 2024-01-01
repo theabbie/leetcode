@@ -1,18 +1,14 @@
-from collections import deque
-
 class DataStream:
     def __init__(self, value: int, k: int):
-        self.q = deque()
+        self.val = -1
+        self.eq = 0
         self.value = value
         self.k = k
-        self.diffctr = 0
 
     def consec(self, num: int) -> bool:
-        self.q.appendleft(num)
-        if num != self.value:
-            self.diffctr += 1
-        if len(self.q) > self.k:
-            v = self.q.pop()
-            if v != self.value:
-                self.diffctr -= 1
-        return len(self.q) >= self.k and self.diffctr == 0
+        if num == self.val:
+            self.eq += 1
+        else:
+            self.eq = 1
+            self.val = num
+        return self.val == self.value and self.eq >= self.k

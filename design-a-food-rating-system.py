@@ -30,8 +30,3 @@ class FoodRatings:
                 del self.deleted[(cuisine, rating, food)]
             rating, food = self.cuisines[cuisine][0]
         return food
-
-# Your FoodRatings object will be instantiated and called as such:
-# obj = FoodRatings(foods, cuisines, ratings)
-# obj.changeRating(food,newRating)
-# param_2 = obj.highestRated(cuisine)

@@ -1,20 +1,15 @@
-from collections import Counter
+from collections import defaultdict
 
 class Solution:
     def distinctNames(self, ideas: List[str]) -> int:
-        names = set(ideas)
-        groups = [[] for _ in range(26)]
-        groupctr = Counter()
-        for idea in ideas:
-            groups[ord(idea[0]) - ord('a')].append(idea)
-        for l in 'abcdefghijklmnopqrstuvwxyz':
-            for c in 'abcdefghijklmnopqrstuvwxyz':
-                for pair in groups[ord(l) - ord('a')]:
-                    if (c + pair[1:]) not in names:
-                        groupctr[(l, c)] += 1
-        ctr = 0
-        for idea in ideas:
-            for c in 'abcdefghijklmnopqrstuvwxyz':
-                if (c + idea[1:]) not in names:
-                    ctr += groupctr[(c, idea[0])]
-        return ctr
+        wset = set(ideas)
+        ctr = [0] * 676
+        pos = lambda x, y: 26 * (ord(x) - ord('a')) + ord(y) - ord('a')
+        res = 0
+        for w in ideas:
+            for cc in range(26):
+                c = chr(ord('a') + cc)
+                if c + w[1:] not in wset:
+                    ctr[pos(w[0], c)] += 1
+                    res += 2 * ctr[pos(c, w[0])]
+        return res
