@@ -1,15 +1,16 @@
 from collections import Counter
 
+M = 1000000007
+
 class Solution:
-    def countPairs(self, deliciousness: List[int]) -> int:
-        deliciousness = Counter(deliciousness)
-        ctr = 0
-        for i in range(22):
-            total = 1 << i
-            for d in deliciousness:
-                if total - d in deliciousness:
-                    if 2 * d != total:
-                        ctr += deliciousness[d] * deliciousness[total - d] / 2
-                    else:
-                        ctr += deliciousness[d] * (deliciousness[d] - 1) // 2
-        return int(ctr) % (10 ** 9 + 7)
+    def countPairs(self, arr: List[int]) -> int:
+        arr.sort()
+        pw = 1
+        res = 0
+        while pw <= 2 * arr[-1]:
+            ctr = Counter()
+            for el in arr:
+                res += ctr[pw - el]
+                ctr[el] += 1
+            pw *= 2
+        return res % M

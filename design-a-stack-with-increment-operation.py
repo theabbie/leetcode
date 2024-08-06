@@ -1,28 +1,23 @@
-class CustomStack:
+from collections import Counter
 
+class CustomStack:
     def __init__(self, maxSize: int):
-        self.stack = []
+        self.s = []
+        self.increments = Counter()
         self.maxSize = maxSize
 
     def push(self, x: int) -> None:
-        if len(self.stack) < self.maxSize:
-            self.stack.append(x)
+        if len(self.s) == self.maxSize:
+            return -1
+        self.s.append(x)
 
     def pop(self) -> int:
-        if len(self.stack) > 0:
-            return self.stack.pop()
-        return -1
-        
+        if len(self.s) == 0:
+            return -1
+        self.s[-1] += self.increments[len(self.s)]
+        self.increments[len(self.s) - 1] += self.increments[len(self.s)]
+        del self.increments[len(self.s)]
+        return self.s.pop()
 
     def increment(self, k: int, val: int) -> None:
-        i = 0
-        while i < k and i < len(self.stack):
-            self.stack[i] += val
-            i += 1
-
-
-# Your CustomStack object will be instantiated and called as such:
-# obj = CustomStack(maxSize)
-# obj.push(x)
-# param_2 = obj.pop()
-# obj.increment(k,val)
+        self.increments[min(k, len(self.s))] += val

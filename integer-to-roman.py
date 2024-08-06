@@ -18,7 +18,6 @@ class Solution:
             vals.insert(0, curr)
             num -= curr
             i += 1
-        print(vals)
         op = ""
         curr = 0
         while curr < len(vals):

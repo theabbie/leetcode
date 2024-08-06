@@ -17,28 +17,36 @@ class DSU:
                 parent_a, parent_b = parent_b, parent_a
             self.parent[parent_b] = parent_a
             self.size[parent_a] += self.size[parent_b]
+            
+MAX = 1 + 10 ** 5
+
+v = [False] * MAX
+sp = [0] * MAX
+
+for i in range(2, MAX, 2):
+    sp[i] = 2
+
+for i in range(3, MAX, 2):
+    if not v[i]:
+        sp[i] = i
+        j = i
+        while j * i < MAX:
+            if not v[j * i]:
+                v[j * i] = True
+                sp[j * i] = i
+            j += 2
 
 class Solution:
     def gcdSort(self, nums: List[int]) -> bool:
         n = len(nums)
-        M = max(nums)
         dsu = DSU(n)
-        prev = {}
+        last = {}
         for i in range(n):
-            if nums[i] in prev:
-                dsu.union(i, prev[nums[i]])
-            else:
-                prev[nums[i]] = i
-        for gcd in range(2, M + 1):
-            mul = 1
-            pos = None
-            while gcd * mul <= M:
-                if gcd * mul in prev:
-                    if pos != None:
-                        dsu.union(prev[gcd * mul], pos)
-                    else:
-                        pos = prev[gcd * mul]
-                mul += 1
+            curr = nums[i]
+            while curr > 1:
+                dsu.union(i, last.get(sp[curr], i))
+                last[sp[curr]] = i
+                curr //= sp[curr]
         groups = [[] for _ in range(n)]
         for i in range(n):
             groups[dsu.find(i)].append(i)
@@ -47,4 +55,4 @@ class Solution:
         res = nums[:]
         for i in range(n):
             res[i] = nums[groups[dsu.find(i)].pop()]
-        return res == sorted(nums)
+        return res == sorted(nums) 

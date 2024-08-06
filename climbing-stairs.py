@@ -1,9 +1,8 @@
+res = [1, 1, 2]
+
+for _ in range(43):
+    res.append(res[-2] + res[-1])
+
 class Solution:
     def climbStairs(self, n: int) -> int:
-        a = 1
-        b = 2
-        if n == 1:
-            return a
-        for _ in range(n - 2):
-            a, b = b, a + b
-        return b
+        return res[n]

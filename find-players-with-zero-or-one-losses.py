@@ -1,4 +1,3 @@
-import bisect
 from collections import defaultdict
 
 class Solution:
@@ -10,10 +9,10 @@ class Solution:
             played[winner] += 1
             played[loser] += 1
         answer = [[], []]
-        for player in played:
+        for player in sorted(played):
             lost = played[player] - won[player]
             if lost == 0:
-                bisect.insort(answer[0], player)
+                answer[0].append(player)
             elif lost == 1:
-                bisect.insort(answer[1], player)
+                answer[1].append(player)
         return answer

@@ -1,39 +1,29 @@
-class SparseTable:
-    def __init__(self, arr, func, init):
-        self.func = func
-        self.init = init
-        n = len(arr)
-        k = n.bit_length()
-        table = [[self.init] * k for _ in range(n)]
-        self.mpow = [(0, 1)] * (n + 1)
+class Solution:
+    def leftmostBuildingQueries(self, heights: List[int], queries: List[List[int]]) -> List[int]:
+        n = len(heights)
+        mpow = [(0, 1)] * (n + 1)
+        pw = [1]
         l = 0
         p = 1
         for i in range(1, n + 1):
             if p * 2 <= i:
                 l += 1
                 p *= 2
-            self.mpow[i] = (l, p)
-        for l in range(k):
-            for i in range(n):
-                if l == 0:
-                    table[i][l] = arr[i]
-                else:
-                    a = table[i][l - 1]
-                    b = self.init
-                    if i + (1 << l - 1) < n:
-                        b = table[i + (1 << l - 1)][l - 1]
-                    table[i][l] = self.func(a, b)
-        self.table = table
-
-    def query(self, l, r):
-        i, p = self.mpow[r - l + 1]
-        return self.func(self.table[l][i], self.table[r - p + 1][i])
-
-class Solution:
-    def leftmostBuildingQueries(self, heights: List[int], queries: List[List[int]]) -> List[int]:
-        n = len(heights)
+                pw.append(p)
+            mpow[i] = (l, p)
+        cache = {}
+        def get(i, x):
+            if x == 0:
+                return heights[i]
+            k = f"{i,x}"
+            if k in cache:
+                return cache[k]
+            cache[k] = max(get(i, x - 1), get(i + pw[x - 1], x - 1))
+            return cache[k]
+        def getmax(i, j):
+            x, px = mpow[j - i]
+            return max(get(i, x), get(j - px, x))
         res = []
-        sp = SparseTable(heights, lambda x, y: max(x, y), float('-inf'))
         for a, b in queries:
             a, b = min(a, b), max(a, b)
             if a == b:
@@ -49,7 +39,7 @@ class Solution:
             curr = n
             while beg <= end:
                 mid = (beg + end) // 2
-                if sp.query(pos, mid) > val:
+                if getmax(pos, mid + 1) > val:
                     curr = mid
                     end = mid - 1
                 else:

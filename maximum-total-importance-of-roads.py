@@ -1,8 +1,6 @@
-from collections import defaultdict
-
 class Solution:
     def maximumImportance(self, n: int, roads: List[List[int]]) -> int:
-        roadctr = defaultdict(int)
+        roadctr = [0] * n
         for a, b in roads:
             roadctr[a] += 1
             roadctr[b] += 1

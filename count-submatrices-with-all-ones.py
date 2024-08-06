@@ -1,27 +1,29 @@
 class Solution:
-    def numsubs(self, arr, k, n):
-        res = 0
-        i = 0
-        while i < n:
-            ctr = 1
-            while i < n - 1 and arr(i) == arr(i + 1):
-                i += 1
-                ctr += 1
-            i += 1
-            if arr(i - 1) == k:
-                res += ctr * (ctr + 1) // 2
-        return res
-    
-    def numSubmat(self, mat: List[List[int]]) -> int:
+    def numSubmat(self, mat):
         m = len(mat)
         n = len(mat[0])
-        p = [[0] for _ in range(m)]
-        for i in range(m):
-            for j in range(n):
-                p[i].append(p[i][-1] + mat[i][j])
         res = 0
-        for i in range(n):
-            for j in range(i + 1, n + 1):
-                arr = lambda x: p[x][j] - p[x][i]
-                res += self.numsubs(arr, j - i, m)
+        heights = [0] * n
+        next_smaller = [n] * n
+        prev_smaller = [-1] * n
+        for i in range(m):
+            stack = []
+            for j in range(n):
+                if mat[i][j] == 1:
+                    heights[j] += 1
+                else:
+                    heights[j] = 0
+                while len(stack) > 0 and heights[j] < heights[stack[-1]]:
+                    curr = stack.pop()
+                    next_smaller[curr] = j
+                prev_smaller[j] = -1
+                if len(stack) > 0:
+                    prev_smaller[j] = stack[-1]
+                stack.append(j)
+            while len(stack) > 0:
+                next_smaller[stack.pop()] = n
+            for j in range(n):
+                l = prev_smaller[j]
+                r = next_smaller[j]
+                res += (j - l) * (r - j) * heights[j]
         return res

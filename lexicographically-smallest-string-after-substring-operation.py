@@ -1,19 +1,12 @@
 class Solution:
     def smallestString(self, s: str) -> str:
         n = len(s)
-        s = list(s)
-        i = 0
-        while i < n and s[i] == "a":
-            i += 1
-        if i == n:
-            pos = ord(s[-1]) - ord("a")
-            pos = (pos + 25) % 26
-            s[-1] = chr(ord("a") + pos)
-            return "".join(s)
-        j = i + 1
-        while j < n and s[j] != "a":
-            j += 1
-        for k in range(i, j):
-            if k < n:
-                s[k] = chr(ord(s[k]) - 1)
-        return "".join(s)
+        if s == "a" * n:
+            return s[:-1] + "z"
+        f = 0
+        while f < n and s[f] == "a":
+            f += 1
+        t = f
+        while t < n and s[t] != "a":
+            t += 1
+        return s[:f] + "".join(chr(ord(c) - 1) for c in s[f:t]) + s[t:]

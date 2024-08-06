@@ -1,6 +1,10 @@
 class Solution:
     def isValid(self, s: str) -> bool:
-        while "abc" in s:
-            i = s.index("abc")
-            s = s[:i] + s[i+3:]
-        return s == ""
+        stack = []
+        for c in s:
+            if len(stack) > 1 and stack[-2] + stack[-1] + c == "abc":
+                stack.pop()
+                stack.pop()
+            else:
+                stack.append(c)
+        return len(stack) == 0

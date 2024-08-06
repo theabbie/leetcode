@@ -1,12 +1,16 @@
+import numpy as np
+
 class Solution:
-    def cvow(self, n):
-        if n == 1:
-            return [5, 4, 3, 2, 1]
-        curr = self.cvow(n - 1)
-        op = [curr[-1]]
-        for i in range(3, -1, -1):
-            op.append(op[-1] + curr[i])
-        return op[::-1]
-    
-    def countVowelStrings(self, n: int) -> int:
-        return self.cvow(n)[0]
+    def countVowelStrings(self, n):
+        mat = np.array(
+            [
+                [1, 0, 0, 0, 0],
+                [1, 1, 0, 0, 0],
+                [1, 1, 1, 0, 0],
+                [1, 1, 1, 1, 0],
+                [1, 1, 1, 1, 1],
+            ]
+        )
+        seed = np.array([1, 0, 0, 0, 0])
+        res = np.linalg.matrix_power(mat, n).dot(seed)
+        return np.sum(res)

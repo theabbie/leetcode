@@ -5,20 +5,23 @@ class Solution:
         vals.sort()
         stack = []
         for p, h, d, pos in vals:
-            if d == "R":
-                stack.append((p, h, d, pos))
-                continue
-            gone = False
-            while len(stack) > 0 and stack[-1][1] <= h and stack[-1][2] == "R":
-                if stack[-1][1] == h:
-                    stack.pop()
-                    gone = True
-                    break
-                h -= 1
-                stack.pop()
-            if not gone and len(stack) > 0 and stack[-1][2] == "R" and stack[-1][1] > h:
-                stack[-1] = (stack[-1][0], stack[-1][1] - 1, stack[-1][2], stack[-1][3])
-                gone = True
-            if not gone:
-                stack.append((p, h, d, pos))
-        return [s[1] for s in sorted(stack, key = lambda x: x[3])]
+            if d == "L":
+                add = True
+                while stack and stack[-1][2] == "R":
+                    if stack[-1][1] < h:
+                        stack.pop()
+                        h -= 1
+                    elif stack[-1][1] > h:
+                        stack[-1][1] -= 1
+                        add = False
+                        break
+                    else:
+                        stack.pop()
+                        add = False
+                        break
+                if add:
+                    stack.append([p, h, d, pos])
+            else:
+                stack.append([p, h, d, pos])
+        stack.sort(key = lambda x: x[3])
+        return [x[1] for x in stack]

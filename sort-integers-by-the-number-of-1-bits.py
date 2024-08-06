@@ -1,3 +1,11 @@
 class Solution:
     def sortByBits(self, arr: List[int]) -> List[int]:
-        return sorted(arr, key = lambda x: ("{:0b}".format(x).count("1"), x))
+        c = {}
+        def count(x):
+            if x == 0:
+                return 0
+            if x in c:
+                return c[x]
+            c[x] = x % 2 + count(x // 2)
+            return c[x]
+        return sorted(arr, key = lambda x: (count(x), x))

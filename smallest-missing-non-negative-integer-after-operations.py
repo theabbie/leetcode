@@ -1,11 +1,11 @@
-from collections import Counter
-
 class Solution:
     def findSmallestInteger(self, nums: List[int], value: int) -> int:
-        n = len(nums)
-        nums = Counter([(value + (el % value)) % value for el in nums])
-        for i in range(max(value, n) + 1):
-            if nums[i % value] > 0:
-                nums[i % value] -= 1
-            else:
-                return i
+        have = Counter()
+        for el in nums:
+            have[(value + (el % value)) % value] += 1
+        mex = 0
+        while True:
+            if have[mex % value] == 0:
+                return mex
+            have[mex % value] -= 1
+            mex += 1

@@ -11,5 +11,5 @@ class Solution:
                 nodes.append(curr.right)
         return seq
     
-    def leafSimilar(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> bool:
+    def leafSimilar(self, root1, root2):
         return self.leafSeq(root1) == self.leafSeq(root2)

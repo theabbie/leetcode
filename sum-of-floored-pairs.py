@@ -1,18 +1,16 @@
-from collections import Counter
-import bisect
-
-M = 10 ** 9 + 7
-
 class Solution:
     def sumOfFlooredPairs(self, nums: List[int]) -> int:
-        nums.sort()
-        count = lambda x, y: bisect.bisect_right(nums, y) - bisect.bisect_left(nums, x)
-        res = 0
-        ctr = Counter(nums)
-        for el in ctr:
+        M = 10 ** 9 + 7
+        MX = max(nums)
+        ctr = [0] * (MX + 2)
+        c = collections.Counter(nums)
+        for el in c:
             mul = 1
-            while el * mul <= nums[-1]:
-                res += ctr[el] * mul * count(el * mul, el * (mul + 1) - 1)
-                res %= M
+            while el * mul <= MX:
+                ctr[el * mul] += c[el] * mul
+                ctr[min(el * (mul + 1), MX + 1)] -= c[el] * mul
                 mul += 1
-        return res
+        for i in range(MX):
+            ctr[i + 1] += ctr[i]
+            ctr[i + 1] %= M
+        return sum(ctr[el] for el in nums) % M

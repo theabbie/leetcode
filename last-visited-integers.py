@@ -1,20 +1,16 @@
 class Solution:
-    def lastVisitedIntegers(self, words: List[str]) -> List[int]:
+    def lastVisitedIntegers(self, nums: List[int]) -> List[int]:
+        seen = []
         res = []
-        vals = []
-        cons = 0
-        prev = -1
-        for el in words:
-            if el == "prev":
-                if prev == "prev":
-                    cons += 1
+        c = 0
+        for el in nums:
+            if el == -1:
+                c += 1
+                if c <= len(seen):
+                    res.append(seen[-c])
                 else:
-                    cons = 1
-                if len(vals) < cons:
                     res.append(-1)
-                else:
-                    res.append(vals[-cons])
             else:
-                vals.append(int(el))
-            prev = el
+                seen.append(el)
+                c = 0
         return res

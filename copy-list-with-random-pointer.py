@@ -1,15 +1,14 @@
 class Solution:
-    def copy(self, head):
-        newhead = None
-        if head:
-            newhead = self.visited.get(head, Node(head.val))
-            self.visited[head] = newhead
-            if head.random != None:
-                newhead.random = self.visited.get(head.random, Node(head.random.val))
-                self.visited[head.random] = newhead.random
-            newhead.next = self.copy(head.next)
-        return newhead
-    
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
-        self.visited = {}
-        return self.copy(head)
+        nodecache = {}
+        def clone(curr):
+            if not curr:
+                return curr
+            if curr in nodecache:
+                return nodecache[curr]
+            copy = Node(curr.val)
+            nodecache[curr] = copy
+            copy.next = clone(curr.next)
+            copy.random = clone(curr.random)
+            return copy
+        return clone(head)

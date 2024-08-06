@@ -1,14 +1,15 @@
-from itertools import permutations
-
 class Solution:
     def largestTimeFromDigits(self, arr: List[int]) -> str:
-        p = permutations(arr)
-        maxtime = (float('-inf'), float('-inf'))
-        for t in p:
-            h = 10 * t[0] + t[1]
-            m = 10 * t[2] + t[3]
-            if 0 <= h < 24 and 0 <= m < 60:
-                maxtime = max(maxtime, (h, m))
-        if maxtime == (float('-inf'), float('-inf')):
+        res = (-1, -1)
+        for i in range(4):
+            for j in range(4):
+                for k in range(4):
+                    for l in range(4):
+                        if len(set({i,j,k,l})) == 4:
+                            h = 10 * arr[i] + arr[j]
+                            m = 10 * arr[k] + arr[l]
+                            if 0 <= h < 24 and 0 <= m < 60:
+                                res = max(res, (h, m))
+        if res[0] == -1:
             return ""
-        return f"{maxtime[0]:02d}:{maxtime[1]:02d}"
+        return f"{res[0]//10}{res[0]%10}:{res[1]//10}{res[1]%10}"

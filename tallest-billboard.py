@@ -1,18 +1,12 @@
-from collections import defaultdict
-
 class Solution:
     def tallestBillboard(self, rods: List[int]) -> int:
-        dp = defaultdict(int)
-        dp[0] = 0
-        for r in rods:
-            curr = defaultdict(int)
-            for el in dp:
-                curr[el] = dp[el]
-            for diff, longer in dp.items():
-                smaller = longer - diff
-                curr[diff + r] = max(curr[diff + r], longer + r)
-                currdiff = abs(smaller + r - longer)
-                currlonger = max(smaller + r, longer)
-                curr[currdiff] = max(curr[currdiff], currlonger)
-            dp = curr
-        return dp[0]
+        S = sum(rods) + 1
+        prev = [float('-inf')] * S
+        prev[0] = 0
+        curr = [float('-inf')] * S
+        g = lambda x: prev[x] if 0 <= x < len(prev) else float('-inf')
+        for i in range(len(rods) - 1, -1, -1):
+            for j in range(S):
+                curr[j] = max(rods[i] + g(j + rods[i]), rods[i] + g(abs(j - rods[i])), g(j))
+            prev, curr = curr, prev
+        return prev[0] // 2

@@ -1,21 +1,28 @@
 class Solution:
-    def isPalindrome(self, s, i, j):
-        if i >= j - 1:
-            return s[i] == s[j - 1]
-        if s[i] == s[j - 1]:
-            return self.isPalindrome(s, i + 1, j - 1)
-        return False
-    
-    def getPos(self, s, i, n):
+    def getPos(self, s, lpal, i, n):
         if i == n:
             return [[]]
-        op = []
-        for j in range(i + 1, n + 1):
-            if self.isPalindrome(s, i, j):
-                curr = s[i:j]
-                val = self.getPos(s, j, n)
-                op += [[curr] + v for v in val]
-        return op
+        res = []
+        for l in lpal[i]:
+            curr = s[i:i+l]
+            val = self.getPos(s, lpal, i + l, n)
+            res += [[curr] + v for v in val]
+        return res
     
     def partition(self, s: str) -> List[List[str]]:
-        return self.getPos(s, 0, len(s))
+        n = len(s)
+        lpal = [[] for _ in range(n)]
+        prevpal = [True] * n
+        pal = [False] * n
+        for i in range(1, n + 1):
+            for j in range(i - 1, n):
+                pal[j] = True
+            l = 1
+            while l <= i:
+                if i >= 2 and i - l < n - 1:
+                    pal[i - l] = s[i - l] == s[i - 1] and prevpal[i - l + 1]
+                if pal[i - l]:
+                    lpal[i - l].append(l)
+                l += 1
+            prevpal, pal = pal, prevpal
+        return self.getPos(s, lpal, 0, len(s))

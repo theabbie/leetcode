@@ -1,33 +1,42 @@
-class FenwickTree:
-    def __init__(self, x):
-        self.bit = x
-        for i in range(len(x)):
-            j = i | (i + 1)
-            if j < len(x):
-                x[j] += x[i]
+class RangeSum:
+    def __init__(self, nums):
+        n = len(nums)
+        B = int(pow(n, 0.5) + 1)
+        blocks = [0 for _ in range(B)]
+        for i in range(n):
+            blocks[i // B] += nums[i]
+        self.nums = nums
+        self.B = B
+        self.blocks = blocks
 
-    def update(self, idx, x):
-        while idx < len(self.bit):
-            self.bit[idx] += x
-            idx |= idx + 1
+    def update(self, index: int, val: int) -> None:
+        self.blocks[index // self.B] -= self.nums[index]
+        self.nums[index] = val
+        self.blocks[index // self.B] += self.nums[index]
 
-    def query(self, end):
-        x = 0
-        while end:
-            x += self.bit[end - 1]
-            end &= end - 1
-        return x
+    def sumRange(self, left: int, right: int) -> int:
+        i = left
+        res = 0
+        while i <= right:
+            if i % self.B == 0 and i + self.B - 1 <= right:
+                res += self.blocks[i // self.B]
+                i += self.B
+            else:
+                res += self.nums[i]
+                i += 1
+        return res 
 
 class Solution:
-    def reversePairs(self, nums: List[int]) -> int:
-        mp = {}
-        for el in nums:
-            mp[el] = mp[2 * el + 1] = 0
-        for i, el in enumerate(sorted(mp)):
-            mp[el] = i
-        fw = FenwickTree([0] * (len(mp) + 1))
+    def reversePairs(self, arr):
+        n = len(arr)
+        arr = [(arr[i], i) for i in range(n)]
+        arr.sort()
+        j = n - 1
         res = 0
-        for el in nums:
-            res += fw.query(len(mp) + 1) - fw.query(mp[2 * el + 1])
-            fw.update(mp[el], 1)
+        ctr = RangeSum([0] * n)
+        for i in range(n - 1, -1, -1):
+            while j >= 0 and arr[j][0] > 2 * arr[i][0]:
+                ctr.update(arr[j][1], 1)
+                j -= 1
+            res += ctr.sumRange(0, arr[i][1] - 1)
         return res

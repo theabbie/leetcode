@@ -1,7 +1,8 @@
 class Solution:
     def accountBalanceAfterPurchase(self, purchaseAmount: int) -> int:
-        if purchaseAmount % 10 >= 5:
-            purchaseAmount += 10 - purchaseAmount % 10
+        x = purchaseAmount % 10
+        if x < 5:
+            purchaseAmount -= x
         else:
-            purchaseAmount -= purchaseAmount % 10
+            purchaseAmount += 10 - x
         return 100 - purchaseAmount

@@ -1,25 +1,28 @@
-class Solution:
-    memo = {}
-    
-    def wordBreakRec(self, s, beg, end, wordSet):
-        key = 5000 * beg + end
-        if key in self.memo:
-            return self.memo[key]
-        n = len(s)
-        if s[beg:end] in wordSet:
-            self.memo[key] = True
-            return True
-        for i in range(beg, end):
-            if self.wordBreakRec(s, beg, i, wordSet) and self.wordBreakRec(s, i, end, wordSet):
-                self.memo[key] = True
-                return True
-        self.memo[key] = False
-        return False
+class TrieNode:
+    def __init__(self):
+        self.child = {}
+        self.end = False
 
-    def wordBreak(self, s: str, wordDict):
-        self.memo = {}
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         n = len(s)
-        wordSet = set()
-        for word in wordDict:
-            wordSet.add(word)
-        return self.wordBreakRec(s, 0, n, wordSet)
+        root = TrieNode()
+        for w in wordDict:
+            curr = root
+            for c in w:
+                if c not in curr.child:
+                    curr.child[c] = TrieNode()
+                curr = curr.child[c]
+            curr.end = True
+        dp = [False] * (n + 1)
+        dp[n] = True
+        for i in range(n - 1, -1, -1):
+            j = i
+            curr = root
+            while j < n and curr:
+                curr = curr.child.get(s[j], None)
+                if curr and curr.end and dp[j + 1]:
+                    dp[i] = True
+                    break
+                j += 1
+        return dp[0]

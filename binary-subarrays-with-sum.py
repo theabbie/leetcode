@@ -1,13 +1,13 @@
-from collections import Counter
-
 class Solution:
     def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
-        ctr = Counter()
-        p = 0
-        ctr[p] += 1
-        res = 0
-        for el in nums:
-            p += el
-            res += ctr[p - goal]
-            ctr[p] += 1
-        return res
+        def count(x):
+            res = 0
+            i = s = 0
+            for j in range(len(nums)):
+                s += nums[j]
+                while i <= j and s > x:
+                    s -= nums[i]
+                    i += 1
+                res += j - i + 1
+            return res
+        return count(goal) - count(goal - 1)

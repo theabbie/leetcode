@@ -1,30 +1,19 @@
 class Solution:
-    def isPalindrome(self, s, i, j):
-        if (i, j) in self.PalCache:
-            return self.PalCache[(i, j)]
-        val = False
-        if i >= j - 1:
-            val = s[i] == s[j - 1]
-        elif s[i] == s[j - 1]:
-            val = self.isPalindrome(s, i + 1, j - 1)
-        self.PalCache[(i, j)] = val
-        return val
-    
-    def mcuts(self, s, i, n):
-        if i == n:
-            return -1
-        if i in self.cache:
-            return self.cache[i]
-        mincuts = n - i - 1
-        for j in range(i + 1, n + 1):
-            if self.isPalindrome(s, i, j):
-                val = self.mcuts(s, j, n)
-                mincuts = min(mincuts, 1 + val)
-        self.cache[i] = mincuts
-        return mincuts
-    
     def minCut(self, s: str) -> int:
-        self.cache = {}
-        self.PalCache = {}
         n = len(s)
-        return self.mcuts(s, 0, n)
+        dp = [float('inf')] * (n + 1)
+        dp[0] = 0
+        prevpal = [True] * n
+        pal = [False] * n
+        for i in range(1, n + 1):
+            for j in range(i - 1, n):
+                pal[j] = True
+            l = 1
+            while l <= i:
+                if i >= 2 and i - l < n - 1:
+                    pal[i - l] = s[i - l] == s[i - 1] and prevpal[i - l + 1]
+                if pal[i - l]:
+                    dp[i] = min(dp[i], 1 + dp[i - l])
+                l += 1
+            prevpal, pal = pal, prevpal
+        return dp[n] - 1

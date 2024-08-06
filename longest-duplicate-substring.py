@@ -1,54 +1,192 @@
-class Solution:
-    def powers(self, n, p, ip, M):
-        pw = 1
-        invpw = 1
-        ppow = []
-        invppow = []
-        for _ in range(n):
-            ppow.append(pw)
-            invppow.append(invpw)
-            pw = (pw * p) % M
-            invpw = (invpw * ip) % M
-        return ppow, invppow
+def construct_suffix_array(string):
+    ta = construct_type_array(string)
+    mapping = construct_alphabet_mapping(string)
+    es = encode_string(string, mapping)
+    buckets = construct_buckets(es, mapping)
+
+    sa = initialize_sa_with_lms_guess(buckets, es, ta)
+    sa = l_type_induced_sorting(sa, buckets, es, ta)
+    sa = s_type_induced_sorting(sa, buckets, es, ta)
+
+    summarized_string, original_indices = summarize(sa, es, ta)
+    summarized_suffix_array = summary_suffix_array(summarized_string)
+
+    sa = final_lms_sort(es, buckets, ta, summarized_suffix_array, original_indices)
+    sa = l_type_induced_sorting(sa, buckets, es, ta)
+    sa = s_type_induced_sorting(sa, buckets, es, ta)
     
-    def hashes(self, s, p, M):
-        n = len(s)
-        h = [0] * (n + 1)
-        for i in range(n):
-            h[i + 1] = (h[i] + self.ppow[i] * (ord(s[i]) - ord('a'))) % M
-        return h
-    
-    def check(self, s, a, b, n):
-        for i in range(n):
-            if s[a + i] != s[b + i]:
-                return False
+    return sa
+
+def initialize_sa_with_lms_guess(buckets, string, ta):
+    sa = [-1] * len(string)
+    tails = get_bucket_tails(buckets)
+
+    for i in range(len(sa)):
+        if is_lms_character(ta, i):
+            c = string[i]
+            sa[tails[c]] = i
+            tails[c] -= 1
+
+    return sa
+
+def l_type_induced_sorting(sa, buckets, string, ta):
+    heads = get_bucket_heads(buckets)
+
+    for i in range(len(sa)):
+        if sa[i] == -1 or sa[i] == 0:
+            continue
+
+        if ta[sa[i] - 1] == 'L':
+            c = string[sa[i] - 1]
+            sa[heads[c]] = sa[i] - 1
+            heads[c] += 1
+
+    return sa
+
+def s_type_induced_sorting(sa, buckets, string, ta):
+    tails = get_bucket_tails(buckets)
+
+    for i in range(len(sa) - 1, -1, -1):
+        if sa[i] == -1 or sa[i] == 0:
+            continue
+
+        if ta[sa[i] - 1] == 'S':
+            c = string[sa[i] - 1]
+            sa[tails[c]] = sa[i] - 1
+            tails[c] -= 1
+
+    return sa
+
+def summarize(sa, string, ta):
+    summarized_array = [-1] * len(string)
+
+    summarized_array[len(string) - 1] = 1
+    last_lms_index = sa[0]
+    current_name = 1
+    for i, sa_entry in enumerate(sa[1:], 1):
+        if not is_lms_character(ta, sa_entry):
+            continue
+
+        if are_equal_lms_substrings(string, ta, last_lms_index, sa_entry):
+            summarized_array[sa_entry] = current_name
+        else:
+            current_name += 1
+            summarized_array[sa_entry] = current_name
+        last_lms_index = sa_entry
+
+    summarized_array.append(0)
+
+    return [s for s in summarized_array if s != -1], [i for i, s in enumerate(summarized_array) if s != -1]
+
+def summary_suffix_array(summarized_string):
+    alphabet_size = len(set(summarized_string))
+    if alphabet_size == len(summarized_string):
+        # Bucket sorting.
+        summarized_suffix_array = [-1] * (len(summarized_string))
+
+        for i, c in enumerate(summarized_string):
+            summarized_suffix_array[c] = i
+
+    else:
+        summarized_suffix_array = construct_suffix_array(summarized_string)
+
+    return summarized_suffix_array
+
+def final_lms_sort(string, buckets, ta, summarized_suffix_array, original_indices):
+    sa = [-1] * len(string)
+    tails = get_bucket_tails(buckets)
+
+    for i in range(len(summarized_suffix_array) - 1, 0, -1):
+        index_at_string = original_indices[summarized_suffix_array[i]]
+
+        c = string[index_at_string]
+        sa[tails[c]] = index_at_string
+
+        tails[c] -= 1
+
+    return sa
+
+def construct_type_array(string):
+    type_array = ['S']
+    for i in range(len(string) - 2, -1, -1):
+        if (string[i] < string[i+1]) or (string[i] == string[i+1] and type_array[-1] == 'S'):
+            type_array.append('S')
+        else:
+            type_array.append('L')
+
+    return list(reversed(type_array))
+
+def is_lms_character(type_array, i):
+    if i == 0:
+        return False
+    elif type_array[i] == 'S' and type_array[i-1] == 'L':
         return True
-    
-    def possible(self, s, hashes, subhash, n, k):
-        seen = {}
-        for i in range(n - k + 1):
-            curr = subhash(hashes, i, i + k - 1)
-            if curr in seen and self.check(s, seen[curr], i, k):
-                return s[seen[curr] : seen[curr] + k]
-            seen[curr] = i
-        return None
-    
+    else:
+        return False
+
+def are_equal_lms_substrings(string, type_array, i1, i2):
+    if i1 == len(string) or i2 == len(string):
+        return False
+
+    for offset, (c1, c2) in enumerate(zip(string[i1:], string[i2:])):
+        is_lms_1 = is_lms_character(type_array, i1 + offset)
+        is_lms_2 = is_lms_character(type_array, i2 + offset)
+
+        if offset != 0 and is_lms_1 and is_lms_2:
+            return True
+
+        if (string[i1 + offset] != string[i2 + offset]) or (is_lms_1 != is_lms_2):
+            return False
+
+def construct_alphabet_mapping(string):
+    alphabets = list(sorted(list(set([c for c in string]))))
+    return dict([(c, i) for i, c in enumerate(alphabets)])
+
+def encode_string(string, mapping):
+    return [mapping[c] for c in string]
+
+def construct_buckets(encoded_string, mapping):
+    alphabet_size = len(mapping)
+
+    buckets = [0] * alphabet_size
+    for i in encoded_string:
+        buckets[i] += 1
+    return buckets
+
+def get_bucket_heads(buckets):
+    heads = [0]
+    for bucket_size in buckets[:-1]:
+        heads.append(heads[-1] + bucket_size)
+    return heads
+
+def get_bucket_tails(buckets):
+    tails = [0]
+    for bucket_size in buckets[1:]:
+        tails.append(tails[-1] + bucket_size)
+    return tails
+
+def longest_common_prefix(s, sa):
+    n = len(sa)
+    phi = [-1] * n
+    for i in range(1, n):
+        phi[sa[i]] = sa[i-1]
+    l = 0
+    plcp = [0] * n
+    for i in range(n):
+        if phi[i] == -1:
+            continue
+        else:
+            while s[i + l] == s[phi[i] + l]:
+                l += 1
+            plcp[i] = l
+            l = max(l-1, 0)
+    return [plcp[sa[i]] for i in range(n)]
+
+class Solution:
     def longestDupSubstring(self, s: str) -> str:
+        s += '$'
         n = len(s)
-        M = 10 ** 9 + 9
-        p = 31
-        self.ppow, self.invppow = self.powers(n + 1, p, pow(p, M - 2, M), M)
-        subhash = lambda h, i, j: (self.invppow[i] * (h[j + 1] + M - h[i])) % M
-        hashes = self.hashes(s, p, M)
-        beg = 1
-        res = ""
-        end = n
-        while beg <= end:
-            mid = (beg + end) // 2
-            curr = self.possible(s, hashes, subhash, n, mid)
-            if curr != None:
-                res = curr
-                beg = mid + 1
-            else:
-                end = mid - 1
-        return res
+        suffix_array = construct_suffix_array(s)
+        LCP = longest_common_prefix(s, suffix_array)
+        j = max(range(n), key = lambda x: LCP[x])
+        return s[suffix_array[j] : suffix_array[j] + LCP[j]]

@@ -1,19 +1,16 @@
 class Solution:
-    def longest(self, s, i, k):
-        if i == 0:
-            return 1 if int(s[i]) <= k else 0
-        if (i, k) in self.cache:
-            return self.cache[(i, k)]
-        a = float('-inf')
-        if k >= int(s[i]):
-            a = 1 + self.longest(s, i - 1, (k - int(s[i])) // 2)
-        b = self.longest(s, i - 1, k)
-        res = max(a, b)
-        self.cache[(i, k)] = res
-        return res
-    
     def longestSubsequence(self, s: str, k: int) -> int:
+        s = s[::-1]
         n = len(s)
-        mlen = 0
-        self.cache = {}
-        return self.longest(s, n - 1, k)
+        zeroes = s.count('0')
+        res = zeroes
+        p = 0
+        ones = 0
+        for i in range(n):
+            if s[i] == '1':
+                ones += 1
+                p += 1 << i
+                if p > k:
+                    break
+                res = max(res, zeroes + ones)
+        return res

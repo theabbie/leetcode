@@ -1,18 +1,15 @@
 class Solution:
     def minFallingPathSum(self, grid: List[List[int]]) -> int:
-        n = len(grid)
-        dp = [[float('inf')] * n for _ in range(n)]
-        m = sm = (float('inf'), -1)
-        for i in range(n):
-            dp[0][i] = grid[0][i]
-            m, sm, temp = sorted([m, sm, (dp[0][i], i)])
-        for i in range(1, n):
+        m = len(grid)
+        n = len(grid[0])
+        s, f = (0, -1), (0, -1)
+        for i in range(m):
             for j in range(n):
-                if m[1] != j:
-                    dp[i][j] = min(dp[i][j], dp[i - 1][m[1]] + grid[i][j])
-                if sm[1] != j:
-                    dp[i][j] = min(dp[i][j], dp[i - 1][sm[1]] + grid[i][j])
-            m = sm = (float('inf'), -1)
+                if f[1] != j:
+                    grid[i][j] += f[0]
+                else:
+                    grid[i][j] += s[0]
+            s, f = (float('inf'), 0), (float('inf'), 0)
             for j in range(n):
-                m, sm, temp = sorted([m, sm, (dp[i][j], j)])
-        return m[0]
+                f, s, x = sorted([s, f, (grid[i][j], j)])
+        return f[0]
