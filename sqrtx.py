@@ -1,9 +1,8 @@
 class Solution:
     def mySqrt(self, x: int) -> int:
-        sqrt = -1
-        p = pow(2, 32)
-        for i in range(32, -1, -1):
-            if (sqrt + p) * (sqrt + p) <= x:
-                sqrt += p
-            p //= 2
+        sqrt = 0
+        for p in range(20, -1, -1):
+            pw = 1 << p
+            if (sqrt + pw) * (sqrt + pw) <= x:
+                sqrt += pw
         return sqrt

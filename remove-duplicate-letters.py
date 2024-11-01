@@ -1,17 +1,24 @@
 class Solution:
     def removeDuplicateLetters(self, s: str) -> str:
-        lastIndex = {}
-        for i, c in enumerate(s):
-            lastIndex[c] = i
-        used = set()
         stack = []
-        for i, c in enumerate(s):
-            if c in used:
+        ctr = [0] * 26
+        rem = [0] * 26
+        pos = lambda x: ord(x) - ord('a')
+        chars = {pos(c) for c in s}
+        def check(extra, gone):
+            for i in chars:
+                if ctr[i] + rem[i] + int(extra == i) - int(gone == i) == 0:
+                    return False
+            return True
+        for c in s:
+            rem[pos(c)] += 1
+        for c in s:
+            rem[pos(c)] -= 1
+            if ctr[pos(c)] > 0:
                 continue
-            while len(stack) > 0 and s[stack[-1]] > c and i < lastIndex[s[stack[-1]]]:
-                curr = stack.pop()
-                if s[curr] in used:
-                    used.remove(s[curr])
-            stack.append(i)
-            used.add(c)
-        return "".join(s[i] for i in stack)
+            while stack and stack[-1] > c and check(pos(c), pos(stack[-1])):
+                p = stack.pop()
+                ctr[pos(p)] -= 1
+            ctr[pos(c)] += 1
+            stack.append(c)
+        return "".join(stack)

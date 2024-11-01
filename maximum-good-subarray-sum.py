@@ -1,15 +1,17 @@
-from collections import defaultdict
-
 class Solution:
     def maximumSubarraySum(self, nums: List[int], k: int) -> int:
-        n = len(nums)
-        firstpref = defaultdict(lambda: float('inf'))
-        p = 0
-        res = float('-inf')
-        for i in range(n):
-            firstpref[nums[i]] = min(firstpref[nums[i]], p)
-            p += nums[i]
-            res = max(res, p - firstpref[nums[i] - k], p - firstpref[nums[i] + k])
+        def solve(arr):
+            n = len(arr)
+            p = [0] * (n + 1)
+            for i in range(n):
+                p[i + 1] = p[i] + arr[i]
+            res = float('-inf')
+            x = defaultdict(lambda: float('inf'))
+            for j in range(n):
+                res = max(res, p[j + 1] - x[arr[j] - k])
+                x[arr[j]] = min(x[arr[j]], p[j])
+            return res
+        res = max(solve(nums), solve(nums[::-1]))
         if res == float('-inf'):
-            return 0
+            res = 0
         return res

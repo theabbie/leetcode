@@ -1,24 +1,27 @@
 class TreeAncestor:
     def __init__(self, n: int, parent: List[int]):
-        self.cache = {}
-        def get(node, p):
-            if p == 0:
-                return parent[node]
-            if (node, p) in self.cache:
-                return self.cache[(node, p)]
-            half = get(node, p - 1)
-            self.cache[(node, p)] = get(half, p - 1) if half != -1 else -1
-            return self.cache[(node, p)]
-        self.get = get
+        SQRT = 1
+        while (SQRT + 1) * (SQRT + 1) < n:
+            SQRT += 1
+        p = [-1 for i in range(n)]
+        for i in range(n):
+            curr = i
+            for _ in range(SQRT):
+                curr = parent[curr] if curr != -1 else -1
+            p[i] = curr
+        self.parent = parent
+        self.p = p
+        self.SQRT = SQRT
 
     def getKthAncestor(self, node: int, k: int) -> int:
-        res = node
-        p = 0
-        while k:
-            if k & 1:
-                res = self.get(res, p)
-                if res == -1:
-                    break
-            p += 1
-            k //= 2
-        return res
+        i = 0
+        while i < k:
+            if i + self.SQRT <= k:
+                node = self.p[node]
+                i += self.SQRT
+            else:
+                node = self.parent[node]
+                i += 1
+            if node == -1:
+                break
+        return node

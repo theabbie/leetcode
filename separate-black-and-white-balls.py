@@ -1,10 +1,9 @@
 class Solution:
     def minimumSteps(self, s: str) -> int:
-        res = 0
-        z = 0
-        for i in range(len(s) - 1, -1, -1):
-            if s[i] == "0":
-                z += 1
+        res = o = 0
+        for c in s:
+            if c == "0":
+                res += o
             else:
-                res += z
+                o += 1
         return res

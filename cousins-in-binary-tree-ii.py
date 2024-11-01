@@ -1,22 +1,38 @@
-from collections import deque, defaultdict
+from collections import deque
 
 class Solution:
     def replaceValueInTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        sums = defaultdict(int)
-        sumparents = defaultdict(lambda: defaultdict(int))
+        sums = []
+        q = deque([root])
+        while q:
+            n = len(q)
+            s = 0
+            for _ in range(n):
+                r = q.pop()
+                if not r:
+                    continue
+                s += r.val
+                if r.left:
+                    q.appendleft(r.left)
+                if r.right:
+                    q.appendleft(r.right)
+            sums.append(s)
+        if root:
+            root.val = 0
         q = deque([(root, 0)])
-        while len(q) > 0:
-            curr, d = q.pop()
-            if curr:
-                sums[d] += curr.val
-                q.appendleft((curr.left, d + 1))
-                q.appendleft((curr.right, d + 1))
-        q = deque([(root, root.val if root else 0, 0, 0)])
-        while len(q) > 0:
-            curr, currval, other, d = q.pop()
-            curr.val = sums[d] - currval - other
-            if curr.left:
-                q.appendleft((curr.left, curr.left.val, curr.right.val if curr.right else 0, d + 1))
-            if curr.right:
-                q.appendleft((curr.right, curr.right.val, curr.left.val if curr.left else 0, d + 1))
+        while q:
+            r, d = q.pop()
+            if not r:
+                continue
+            s = 0
+            if r.left:
+                s += r.left.val
+                q.appendleft((r.left, d + 1))
+            if r.right:
+                s += r.right.val
+                q.appendleft((r.right, d + 1))
+            if r.left:
+                r.left.val = sums[d + 1] - s
+            if r.right:
+                r.right.val = sums[d + 1] - s
         return root

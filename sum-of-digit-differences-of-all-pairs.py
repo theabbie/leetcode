@@ -1,15 +1,13 @@
-from collections import *
-
 class Solution:
     def sumDigitDifferences(self, nums: List[int]) -> int:
         n = len(nums)
         res = 0
-        for _ in range(11):
-            ctr = Counter()
-            total = 0
+        while nums[0]:
+            res += n * n
+            ctr = [0] * 10
             for i in range(n):
-                res += total - ctr[nums[i] % 10]
-                ctr[nums[i] % 10] += 1
-                total += 1
+                d = nums[i] % 10
+                res -= 2 * ctr[d] + 1
+                ctr[d] += 1
                 nums[i] //= 10
-        return res
+        return res // 2

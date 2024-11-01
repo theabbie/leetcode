@@ -2,10 +2,9 @@ class Solution:
     def divideArray(self, nums: List[int], k: int) -> List[List[int]]:
         n = len(nums)
         nums.sort()
-        res = [[] for _ in range(n // 3)]
-        for i in range(n):
-            res[i // 3].append(nums[i])
-        for i in range(n // 3):
-            if res[i][2] - res[i][0] > k:
+        res = []
+        for i in range(0, n, 3):
+            res.append([nums[i], nums[i + 1], nums[i + 2]])
+            if nums[i + 2] - nums[i] > k:
                 return []
         return res

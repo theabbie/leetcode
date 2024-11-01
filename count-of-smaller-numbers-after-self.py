@@ -11,7 +11,7 @@ class Solution:
         for b in range(B, -1, -1):
             ctr = defaultdict(lambda: [0, 0])
             for i in range(n - 1, -1, -1):
-                if nums[i] & p:
+                if nums[i] & (1 << b):
                     res[i] += ctr[nums[i] & MASK][0]
                     ctr[nums[i] & MASK][1] += 1
                 else:
