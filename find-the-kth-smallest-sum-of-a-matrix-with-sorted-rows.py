@@ -7,19 +7,20 @@ class Solution:
         pos = [0] * m
         s = 0
         for i in range(m):
-            s += mat[i][pos[i]]
-        heap = [(s, [0] * m)]
-        v = set()
-        for _ in range(k):
-            currs, poses = heapq.heappop(heap)
-            s = currs
+            s += mat[i][pos[0]]
+        v = {tuple(pos)}
+        heap = [(s, pos)]
+        rem = k
+        while heap:
+            s, pos = heapq.heappop(heap)
+            rem -= 1
+            if rem == 0:
+                return s
             for i in range(m):
-                if poses[i] + 1 < n:
-                    news = currs - mat[i][poses[i]] + mat[i][poses[i] + 1]
-                    poses[i] += 1
-                    pt = tuple(poses)
-                    if pt not in v:
-                        v.add(pt)
-                        heapq.heappush(heap, (news, poses[:]))
-                    poses[i] -= 1
-        return s
+                if pos[i] + 1 < n:
+                    newpos = pos[:]
+                    newpos[i] += 1
+                    news = s - mat[i][pos[i]] + mat[i][pos[i] + 1]
+                    if tuple(newpos) not in v:
+                        v.add(tuple(newpos))
+                        heapq.heappush(heap, (news, newpos))

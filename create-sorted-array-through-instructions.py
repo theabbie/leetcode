@@ -1,36 +1,46 @@
-class FenwickTree:
-    def __init__(self, x):
-        self.bit = x
-        for i in range(len(x)):
-            j = i | (i + 1)
-            if j < len(x):
-                x[j] += x[i]
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.count = 0
 
-    def update(self, idx, x):
-        while idx < len(self.bit):
-            self.bit[idx] += x
-            idx |= idx + 1
+class Bigger:
+    def __init__(self):
+        self.root = TrieNode()
+        self.B = 24
 
-    def query(self, end):
-        x = 0
-        while end:
-            x += self.bit[end - 1]
-            end &= end - 1
-        return x
+    def insert(self, val):
+        node = self.root
+        for i in range(self.B - 1, -1, -1):
+            bit = (val >> i) & 1
+            if bit not in node.children:
+                node.children[bit] = TrieNode()
+            node = node.children[bit]
+            node.count += 1
 
+    def countBigger(self, val):
+        node = self.root
+        res = 0
+        for i in range(self.B - 1, -1, -1):
+            bit = (val >> i) & 1
+            if bit == 0 and 1 in node.children:
+                res += node.children[1].count
+            if bit not in node.children:
+                break
+            node = node.children[bit]
+        return res
+    
 class Solution:
     def createSortedArray(self, instructions: List[int]) -> int:
         MOD = 10 ** 9 + 7
-        mp = {}
-        for el in instructions:
-            mp[el] = 0
-        for i, el in enumerate(sorted(mp)):
-            mp[el] = i
-        M = len(mp)
-        fw = FenwickTree([0] * (M + 1))
+        ctr = Counter()
+        bg = Bigger()
         res = 0
+        x = 0
         for el in instructions:
-            res += min(fw.query(mp[el]), fw.query(M + 1) - fw.query(mp[el] + 1))
+            v = bg.countBigger(el)
+            res += min(v, x - ctr[el] - v)
             res %= MOD
-            fw.update(mp[el], 1)
+            bg.insert(el)
+            ctr[el] += 1
+            x += 1
         return res

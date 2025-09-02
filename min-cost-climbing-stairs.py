@@ -1,14 +1,8 @@
 class Solution:
-    def mcost(self, cost, i, n):
-        if i >= n:
-            return 0
-        if i in self.cache:
-            return self.cache[i]
-        res = cost[i] + min(self.mcost(cost, i + 1, n), self.mcost(cost, i + 2, n))
-        self.cache[i] = res
-        return res
-    
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-        self.cache = {}
         n = len(cost)
-        return min(self.mcost(cost, 0, n), self.mcost(cost, 1, n))
+        dp = [float('inf')] * (n + 2)
+        dp[n] = 0
+        for i in range(n - 1, -1, -1):
+            dp[i] = cost[i] + min(dp[i + 1], dp[i + 2])
+        return min(dp[0], dp[1])

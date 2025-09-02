@@ -1,10 +1,16 @@
+from sortedcontainers import SortedList
+
 class Solution:
-    def countGoodTriplets(self, arr: List[int], a: int, b: int, c: int) -> int:
+    def countGoodTriplets(self, arr, a, b, c):
         n = len(arr)
-        ctr = 0
+        res = 0
         for i in range(n):
-            for j in range(i + 1, n):
-                for k in range(j + 1, n):
-                    if abs(arr[i] - arr[j]) <= a and abs(arr[j] - arr[k]) <= b and abs(arr[i] - arr[k]) <= c:
-                        ctr += 1
-        return ctr
+            sl = SortedList()
+            ctr = lambda l, r: (sl.bisect_right(r) - sl.bisect_left(l)) if l <= r else 0
+            for k in range(i + 1, n):
+                if abs(arr[i] - arr[k]) <= c:
+                    l1, r1 = arr[i] - a, arr[i] + a
+                    l2, r2 = arr[k] - b, arr[k] + b
+                    res += ctr(max(l1, l2), min(r1, r2))
+                sl.add(arr[k])
+        return res

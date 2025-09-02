@@ -1,7 +1,8 @@
 from collections import defaultdict
 
 class Solution:
-    def getWordsInLongestSubsequence(self, n: int, words: List[str], groups: List[int]) -> List[str]:
+    def getWordsInLongestSubsequence(self, words: List[str], groups: List[int]) -> List[str]:
+        n = len(words)
         pos = {}
         for i in range(n):
             pos[words[i]] = i

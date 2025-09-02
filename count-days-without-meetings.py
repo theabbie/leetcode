@@ -1,20 +1,16 @@
 class Solution:
-    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-        n = len(intervals)
+    def merge(self, intervals):
+        res = []
         intervals.sort()
         prev = float('-inf')
-        res = []
-        for a, b in intervals:
-            if a > prev:
-                res.append([a, b])
+        for l, r in intervals:
+            if l <= prev:
+                res[-1][-1] = max(res[-1][1], r)
             else:
-                res[-1][1] = max(res[-1][1], b)
-            prev = max(prev, b)
+                res.append([l, r])
+            prev = res[-1][1]
         return res
     
-    def countDays(self, days: int, meetings: List[List[int]]) -> int:
+    def countDays(self, days, meetings):
         meetings = self.merge(meetings)
-        res = days
-        for x, y in meetings:
-            res -= y - x + 1
-        return res
+        return days - sum(r - l + 1 for l, r in meetings)

@@ -1,34 +1,23 @@
-from collections import defaultdict
-
 class Solution:
-    def find(self, arr, val, n):
-        beg = 0
-        end = len(arr) - 1
-        res = n
-        while beg <= end:
-            mid = (beg + end) // 2
-            if arr[mid] > val:
-                res = arr[mid]
-                end = mid - 1
-            else:
-                beg = mid + 1
-        return res
-    
-    def canMakeSubsequence(self, str1: str, str2: str) -> bool:
-        n = len(str1)
-        pos = defaultdict(list)
-        for i in range(n):
-            pos[str1[i]].append(i)
-        res = True
+    def canMakeSubsequence(self, a: str, b: str) -> bool:
+        m = len(a)
+        n = len(b)
+        def get(c):
+            c = ord(c) - ord('a')
+            c += 25
+            c %= 26
+            return chr(ord('a') + c)
+        nxt = {}
+        nxts = [-1] * (m + 1)
+        for i in range(m - 1, -1, -1):
+            nxts[i] = dict(nxt)
+            nxt[a[i]] = i
+        nxts[-1] = nxt
         prev = -1
-        for c in str2:
-            x = ord(c) - ord('a')
-            minpos = n
-            for diff in range(2):
-                cc = chr(ord('a') + (26 + x - diff) % 26)
-                minpos = min(minpos, self.find(pos[cc], prev, n))
-            prev = minpos
-            if prev == n:
-                res = False
-                break
-        return res
+        for c in b:
+            x = nxts[prev].get(c, m)
+            y = nxts[prev].get(get(c), m)
+            prev = min(x, y)
+            if prev == m:
+                return False
+        return True

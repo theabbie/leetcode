@@ -1,11 +1,12 @@
-from collections import Counter
-
 class Solution:
     def countPairs(self, coordinates: List[List[int]], k: int) -> int:
-        res = 0
+        n = len(coordinates)
         ctr = Counter()
-        for a, b in coordinates:
-            for i in range(k + 1):
-                res += ctr[(a ^ i, b ^ (k - i))]
-            ctr[(a, b)] += 1
+        res = 0
+        for x2, y2 in coordinates:
+            for l in range(k + 1):
+                x1 = x2 ^ l
+                y1 = y2 ^ (k - l)
+                res += ctr[(x1, y1)]
+            ctr[(x2, y2)] += 1
         return res

@@ -3,7 +3,7 @@ class Solution:
         target = 0
         for el in nums:
             target |= el
-        @lru_cache(maxsize = None)
+        @cache
         def dp(i, x):
             if i >= len(nums):
                 return int(x == target)

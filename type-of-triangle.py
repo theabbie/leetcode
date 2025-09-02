@@ -3,8 +3,8 @@ class Solution:
         nums.sort()
         if nums[0] + nums[1] <= nums[2]:
             return "none"
-        if nums[0] == nums[-1]:
+        if nums[0] == nums[2]:
             return "equilateral"
-        if nums[0] == nums[1] or nums[1] == nums[2]:
-            return "isosceles"
-        return "scalene"
+        if len(set(nums)) == 3:
+            return "scalene"
+        return "isosceles"

@@ -1,33 +1,59 @@
-from sortedcontainers import SortedList
+class Stack:
+    def __init__(self, init, func):
+        self.stack = deque([(init, init)])
+        self.func = func
+        
+    def push(self, val):
+        top, topfunc = self.stack[-1]
+        self.stack.append((val, self.func(topfunc, val)))
+        
+    def empty(self):
+        return len(self.stack) <= 1
+        
+    def pop(self):
+        if not self.empty():
+            top, topfunc = self.stack.pop()
+            return top
+            
+    def funcval(self):
+        top, topfunc = self.stack[-1]
+        return topfunc
+
+class Queue:
+    def __init__(self, init = float('inf'), func = min):
+        self.func = func
+        self.f = Stack(init, func)
+        self.s = Stack(init, func)
+        
+    def push(self, val):
+        self.f.push(val)
+        
+    def empty(self):
+        return self.f.empty() and self.s.empty()
+    
+    def pop(self):
+        if self.s.empty():
+            while not self.f.empty():
+                self.s.push(self.f.pop())
+        if not self.s.empty():
+            return self.s.pop()
+                    
+    def funcval(self):
+        return self.func(self.f.funcval(), self.s.funcval())
 
 class Solution:
     def continuousSubarrays(self, nums: List[int]) -> int:
         n = len(nums)
-        arr = [(nums[i], i) for i in range(n)]
-        arr.sort()
-        i = 0
-        order = SortedList()
-        left = [-1] * n
-        for el, pos in arr:
-            while i < n and arr[i][0] < el - 2:
-                order.add(arr[i][1])
-                i += 1
-            j = order.bisect_left(pos)
-            if 0 <= j - 1 < len(order):
-                left[pos] = order[j - 1]
-        arr.reverse()
-        i = 0
-        order = SortedList()
-        for el, pos in arr:
-            while i < n and arr[i][0] > el + 2:
-                order.add(arr[i][1])
-                i += 1
-            j = order.bisect_left(pos)
-            if 0 <= j - 1 < len(order):
-                left[pos] = max(left[pos], order[j - 1])
         res = 0
-        mleft = -1
-        for i in range(n):
-            mleft = max(mleft, left[i])
-            res += i - mleft
+        minq = Queue(float('inf'), func = min)
+        maxq = Queue(float('-inf'), func = max)
+        i = 0
+        for j in range(n):
+            minq.push(nums[j])
+            maxq.push(nums[j])
+            while i < j and maxq.funcval() - minq.funcval() > 2:
+                minq.pop()
+                maxq.pop()
+                i += 1
+            res += j - i + 1
         return res

@@ -1,0 +1,2 @@
+-- Write your PostgreSQL query statement below
+SELECT empA.name FROM Employee AS empA LEFT JOIN Employee AS empB ON empA.id = empB.managerId GROUP BY empA.id, empA.name HAVING COUNT(*) >= 5;

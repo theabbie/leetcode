@@ -2,7 +2,7 @@ import heapq
 import bisect
 
 class Solution:
-    def maxPoints(self, grid: List[List[int]], queries: List[int]) -> List[int]:
+    def maxPoints(self, grid, queries):
         m = len(grid)
         n = len(grid[0])
         heap = [(grid[0][0], 0, 0)]

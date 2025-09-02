@@ -1,30 +1,26 @@
 class Solution:
-    def getNum(self, graph, i, res):
-        if res[i] != -1:
-            return res[i]
-        mval = 0
-        for j in graph[i]:
-            curr = self.getNum(graph, j, res)
-            mval = max(mval, curr)
-        res[i] = 1 + mval
-        return 1 + mval
-    
     def candy(self, ratings: List[int]) -> int:
         n = len(ratings)
-        graph = {}
-        for i in range(n):
-            graph[i] = []
-            l = float('inf')
-            r = float('inf')
-            if i > 0:
-                l = ratings[i - 1]
-            if i < n - 1:
-                r = ratings[i + 1]
-            if ratings[i] > l:
-                graph[i].append(i - 1)
-            if ratings[i] > r:
+        graph = [[] for _ in range(n)]
+        indeg = [0] * n
+        for i in range(n - 1):
+            if ratings[i + 1] > ratings[i]:
                 graph[i].append(i + 1)
-        res = [-1] * n
+                indeg[i + 1] += 1
+            if ratings[i] > ratings[i + 1]:
+                graph[i + 1].append(i)
+                indeg[i] += 1
+        res = [0] * n
+        q = deque()
         for i in range(n):
-            self.getNum(graph, i, res)
+            if indeg[i] == 0:
+                q.append(i)
+                res[i] = 1
+        while q:
+            u = q.popleft()
+            for v in graph[u]:
+                indeg[v] -= 1
+                if indeg[v] == 0:
+                    res[v] = res[u] + 1
+                    q.append(v)
         return sum(res)

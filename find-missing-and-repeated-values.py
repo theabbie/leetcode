@@ -1,15 +1,17 @@
 class Solution:
-    def findMissingAndRepeatedValues(self, grid: List[List[int]]) -> List[int]:
+    def findMissingAndRepeatedValues(self, grid):
         n = len(grid)
-        seen = set()
-        rem = set(range(1, n * n + 1))
-        res = [-1, -1]
-        for i in range(n):
-            for j in range(n):
-                if grid[i][j] in seen:
-                    res[0] = grid[i][j]
-                seen.add(grid[i][j])
-                if grid[i][j] in rem:
-                    rem.remove(grid[i][j])
-        res[1] = min(rem)
-        return res
+        ctr = [0] * (n * n + 1)
+        
+        for row in grid:
+            for num in row:
+                ctr[num] += 1
+        
+        a = b = -1
+        for i in range(1, n * n + 1):
+            if ctr[i] == 2:
+                a = i
+            elif ctr[i] == 0:
+                b = i
+        
+        return [a, b]

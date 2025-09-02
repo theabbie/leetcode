@@ -1,20 +1,27 @@
 class Solution:
     def minDominoRotations(self, tops: List[int], bottoms: List[int]) -> int:
         n = len(tops)
-        minSwaps = float('inf')
-        for v in range(1, 7):
-            pos = True
-            currtopswaps = 0
-            currbottomswaps = 0
+        res = float('inf')
+        for a in range(1, 7):
+            cost = 0
             for i in range(n):
-                if tops[i] != v and bottoms[i] != v:
-                    pos = False
-                    break
+                if tops[i] == a:
+                    continue
+                if bottoms[i] == a:
+                    cost += 1
                 else:
-                    if tops[i] != v:
-                        currtopswaps += 1
-                    if bottoms[i] != v:
-                        currbottomswaps += 1
-            if pos:
-                minSwaps = min(minSwaps, currtopswaps, currbottomswaps)
-        return minSwaps if minSwaps != float('inf') else -1
+                    cost = float('inf')
+            res = min(res, cost)
+        for a in range(1, 7):
+            cost = 0
+            for i in range(n):
+                if bottoms[i] == a:
+                    continue
+                if tops[i] == a:
+                    cost += 1
+                else:
+                    cost = float('inf')
+            res = min(res, cost)
+        if res == float('inf'):
+            res = -1
+        return res

@@ -7,4 +7,3 @@ class Solution:
             if el > 0:
                 pos += 1
         return max(pos, neg)
-        

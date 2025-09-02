@@ -1,10 +1,10 @@
 class Solution:
     def doesValidArrayExist(self, derived: List[int]) -> bool:
         n = len(derived)
-        for first in range(2):
-            newarr = [first] * n
+        for start in range(2):
+            prev = start
             for i in range(n):
-                newarr[(i + 1) % n] = newarr[i] ^ derived[i]
-            if newarr[0] == first:
+                prev = derived[i] ^ prev
+            if prev == start:
                 return True
         return False

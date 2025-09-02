@@ -1,23 +1,20 @@
-import heapq
-
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
 class Solution:
-    def getAllElements(self, root1: TreeNode, root2: TreeNode) -> List[int]:
-        heap = []
-        paths = [root1, root2]
-        i = 0
-        while i < len(paths):
-            curr = paths[i]
-            if curr:
-                heapq.heappush(heap, curr.val)
-                if curr.left:
-                    paths.append(curr.left)
-                if curr.right:
-                    paths.append(curr.right)
-            i += 1
-        return heapq.nsmallest(len(heap), heap)
+    def getAllElements(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> List[int]:
+        def dfs(r):
+            if not r:
+                return []
+            return dfs(r.left) + [r.val] + dfs(r.right)
+        def merge(a, b):
+            res = []
+            i = j = 0
+            while i < len(a) and j < len(b):
+                if a[i] <= b[j]:
+                    res.append(a[i])
+                    i += 1
+                else:
+                    res.append(b[j])
+                    j += 1
+            res.extend(a[i:])
+            res.extend(b[j:])
+            return res
+        return merge(dfs(root1), dfs(root2))

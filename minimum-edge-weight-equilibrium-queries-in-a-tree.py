@@ -34,26 +34,29 @@ class Solution:
                 k //= 2
                 p += 1
             return ac
+        def lca(u, v):
+            if level[u] < level[v]:
+                u, v = v, u
+            diff = level[u] - level[v]
+            i = 0
+            while diff:
+                if diff & 1:
+                    u = parent[u][i]
+                diff //= 2
+                i += 1
+            if u == v:
+                return u
+            for i in range(LOG - 1, -1, -1):
+                if parent[u][i] != parent[v][i]:
+                    u = parent[u][i]
+                    v = parent[v][i]
+            return parent[u][0]
         res = []
         for x, y in queries:
-            if level[x] > level[y]:
-                x, y = y, x
-            pathctr = Counter()
-            pathctr += nodectr[x] + nodectr[y]
-            y = ancestor(y, level[y] - level[x])
-            beg = 0
-            end = n
-            LCA = end
-            while beg <= end:
-                mid = (beg + end) // 2
-                if ancestor(x, mid) == ancestor(y, mid):
-                    LCA = mid
-                    end = mid - 1
-                else:
-                    beg = mid + 1
-            LCA_node = ancestor(x, LCA)
-            for el in nodectr[LCA_node]:
-                pathctr[el] -= 2 * nodectr[LCA_node][el]
+            pathctr = nodectr[x] + nodectr[y]
+            LCA = lca(x, y)
+            for el in nodectr[LCA]:
+                pathctr[el] -= 2 * nodectr[LCA][el]
             if len(pathctr) > 0:
                 res.append(sum(pathctr.values()) - max(pathctr.values()))
             else:

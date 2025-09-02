@@ -1,9 +1,16 @@
 class Solution:
     def canSortArray(self, nums: List[int]) -> bool:
         n = len(nums)
-        ctr = lambda x: "{:0b}".format(x).count("1")
-        for _ in range(n):
-            for i in range(n - 1):
-                if ctr(nums[i]) == ctr(nums[i + 1]) and nums[i] > nums[i + 1]:
-                    nums[i], nums[i + 1] = nums[i + 1], nums[i]
-        return nums == sorted(nums)
+        prev = float('-inf')
+        i = 0
+        while i < n:
+            ctr = 1
+            while i < n - 1 and nums[i].bit_count() == nums[i + 1].bit_count():
+                i += 1
+                ctr += 1
+            curr = nums[i - ctr + 1 : i + 1]
+            if min(curr) < prev:
+                return False
+            prev = max(curr)
+            i += 1
+        return True
